@@ -8,7 +8,8 @@ import ffmpeg
 import re
 import os
 import shutil
-from gradio_mycomponent import MyComponent
+from gradio_streamvideo import StreamVideo
+import time
 
 gr.set_static_paths("/home/userroot/dev/CCFClip/stream")
 post_sys_prompt = '''
@@ -66,14 +67,15 @@ def auto_clip(full_text, model_select, system_prompt, user_prompt,  temperature=
 
     return response['message']['content']
 
-def post_run(full_text, model_select, system_prompt, user_prompt, temperature=0.1, num_ctx=30000, keep_alive=-1):
+def post_run(full_text, model_select, system_prompt, user_prompt, temperature=0.1, num_ctx=30000, keep_alive=-1, num_predict=768):
     response = ollama.chat(model=model_select, messages=[
 
         {'role': 'system', 'content': system_prompt},
         {'role': 'user', 'content': user_prompt + full_text }
     ],options= {
         "num_ctx": num_ctx ,
-        "temperature" : temperature
+        "temperature" : temperature,
+        'num_predict' : num_predict
     }, keep_alive=keep_alive)
 
     return response['message']['content']
@@ -82,13 +84,13 @@ def invert_find(short_text, short_post_text, srt_text, fuzz_param):
     if short_post_text != "" :
         short_text = short_post_text
     last_cursor = 0
-    subs = pysubs2.SSAFile.from_string(srt_text)
+    subs = pysubs2.SSAFile.from_string(srt_text)                                      
     subs_out = pysubs2.SSAFile()
     # read short_text by line
     for line in short_text.split('\n'):
         matches = re.findall(r'"(.*?)"', line)
         for match in matches:
-            split_text = re.split(r'[，,、？。！…]', match)
+            split_text = re.split(r'[，,、？。！…：；]', match)
             
             for seg in split_text:
                 #print(f"seg is {seg}")
@@ -112,7 +114,9 @@ def edit_clips(srt_file, video_file):
     subs = pysubs2.SSAFile.from_string(srt_file)
 #subs = pysubs2.load('cliped_srt/clip1.srt')
     
-    output_file = 'stream/output.m3u8'
+    # get current timestamp as second
+    ts = int(time.time())
+    output_file = 'stream' + f'/output_{ts}.m3u8'
 
     clips = []
     for i in range(len(subs)):
@@ -134,7 +138,7 @@ def edit_clips(srt_file, video_file):
 
     #demo.load(None,None,None,js=scripts)
 
-    return output_file
+    return "http://127.0.0.1:7860/file="+ output_file
         
 callback = gr.CSVLogger()
 with gr.Blocks() as demo:
@@ -193,7 +197,7 @@ with gr.Blocks() as demo:
             clips_btn = gr.Button("合并视频")
             #video = gr.HTML("<video width='640' height='478' controls autoplay></video>")
             #video = gr.Video()
-            test = MyComponent()
+            test = StreamVideo()
 
 
     save_video_btn.click(fn=save_video, inputs=[video_file, video_path], outputs=None)
@@ -210,7 +214,7 @@ with gr.Blocks() as demo:
     user_prompt_file.upload(fn=load_user_prompt, inputs=user_prompt_file, outputs=user_prompt_text)
     
     edit_btn.click(fn=invert_find, inputs=[short_text, short_post_text, srt_text, fuzz_param], outputs=invert_srt_text)
-    clips_btn.click(fn=edit_clips, inputs=[invert_srt_text, video_selected], outputs=None)
+    clips_btn.click(fn=edit_clips, inputs=[invert_srt_text, video_selected], outputs=test)
 
     post_btn.click(fn=post_run, inputs=[short_text, model_select, post_prompt_text, post_user_text, temperature, ctx_num,  keep_alive], outputs=short_post_text)
     #greet_btn.click(fn=greet, inputs=name, outputs=output, api_name="greet")
