@@ -21,7 +21,7 @@ with gr.Blocks(
 # `gradio_streamvideo`
 
 <div style="display: flex; gap: 7px;">
-<img alt="Static Badge" src="https://img.shields.io/badge/version%20-%200.0.1%20-%20orange">  
+<img alt="Static Badge" src="https://img.shields.io/badge/version%20-%200.0.3%20-%20orange">  
 </div>
 
 hls video player
@@ -41,7 +41,7 @@ pip install gradio_streamvideo
 
 import gradio as gr
 from gradio_streamvideo import StreamVideo
-
+import time
 
 example = StreamVideo().example_value()
 
@@ -52,10 +52,9 @@ demo = gr.Interface(
     # examples=[[example]],  # uncomment this line to view the "example version" of your component
 )
 
-
+ 
 if __name__ == "__main__":
-    demo.launch()
-
+    demo.launch() 
 ```
 """, elem_classes=["md-custom"], header_links=True)
 

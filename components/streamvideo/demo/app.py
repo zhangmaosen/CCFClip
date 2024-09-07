@@ -1,7 +1,7 @@
 
 import gradio as gr
 from gradio_streamvideo import StreamVideo
-
+import time
 
 example = StreamVideo().example_value()
 
@@ -12,6 +12,6 @@ demo = gr.Interface(
     # examples=[[example]],  # uncomment this line to view the "example version" of your component
 )
 
-
+ 
 if __name__ == "__main__":
-    demo.launch()
+    demo.launch() 

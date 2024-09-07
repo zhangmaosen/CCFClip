@@ -7,7 +7,7 @@
 	import { StatusTracker } from "@gradio/statustracker";
 	import type { LoadingStatus } from "@gradio/statustracker";
 	import { tick } from "svelte";
-
+	import { onMount } from "svelte";
 	import Hls from "hls.js";
 
 	export let gradio: Gradio<{
@@ -29,17 +29,24 @@
 	export let value_is_output = false;
 	export let interactive: boolean;
 	export let rtl = false;
-	export let hls = new Hls();
+
 	export let video_id = "";
+
+	const hls = new Hls();
 
 	$: {
 		video_id = elem_id + "-video";
 	}
 
 	$: {
-		hls.loadSource(value);
+		if (Hls.isSupported()) {
+			console.log("hello hls.js!");
+			hls.loadSource(value);
 
-		hls.attachMedia(document.getElementById(video_id) as HTMLVideoElement);
+			hls.attachMedia(
+				document.getElementById(video_id) as HTMLVideoElement,
+			);
+		}
 	}
 	let el: HTMLTextAreaElement | HTMLInputElement;
 	const container = true;

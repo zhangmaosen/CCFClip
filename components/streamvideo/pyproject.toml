@@ -8,7 +8,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "gradio_streamvideo"
-version = "0.0.1"
+version = "0.0.3"
 description = "hls video player"
 readme = "README.md"
 license = "apache-2.0"
@@ -45,7 +45,7 @@ classifiers = [
 dev = ["build", "twine"]
 
 [tool.hatch.build]
-artifacts = ["/backend/gradio_streamvideo/templates", "*.pyi"]
+artifacts = ["/backend/gradio_streamvideo/templates", "*.pyi", "/home/userroot/miniconda3/envs/time/lib/python3.11/site-packages/gradio_streamvideo/templates"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["/backend/gradio_streamvideo"]
