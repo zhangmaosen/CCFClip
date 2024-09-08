@@ -22,19 +22,22 @@ post_user_prompt = '''
 '''
 
 step_1_sys_prompt = '''
-你是科技媒体的资深编辑，请分析出字幕中的精彩内容，从精彩内容中总结出短标题并输出，输出不要超过6个。
-输出的格式为："标题1/标题2/.../标题6"
+你是科技媒体的资深编辑，请分析出字幕中的精彩内容，从精彩内容中总结出小标题并输出，输出的小标题数量不要超过8个。注意减少对原理性知识的字幕裁剪.
+输出的格式为：
+<小标题1>
+<小标题2>
+<...>
+<小标题8>
 '''
 
 step_2_sys_prompt_pre = '''
-你是一个演讲类视频的字幕分析剪辑器，输入视频的字幕：
-第一步：分析出中心思想与
+你是一个演讲类视频的字幕分析剪辑器，输入视频的字幕。从字幕中找到关于
 '''
 step_2_sys_prompt_post = '''
-相关度大于90%的精彩字幕内容并裁剪出来，注意确保裁剪出来的字幕内容与字幕原始内容完全匹配。
-第二步：将裁剪出来的字幕内容与上下文合并成待输出的字幕内容。
-第三步：从第二步输出的字幕内容中精选出20条以内的字幕内容输出。
-输出需严格按照如下格式：* "文本"
+主题的字幕裁剪出来。注意保持裁剪的完整性，注意裁剪过程不要对字幕进行改写或总结，注意减少对原理性知识的字幕裁剪，注意如果从字幕中没有找到就不要裁剪出来，输出为空。
+注意严格按照格式，按行输出裁剪出来的字幕，输出格式为：
+* "输出的字幕1"
+* "输出的字幕2"
 '''
 def save_video(video, target_path):
     """
@@ -61,6 +64,8 @@ def load_sys_prompt(prompt_file):
 
     return prompt_text
 
+def temp_save(out, input):
+    return out + input 
 def load_user_prompt(prompt_file):
     with open(prompt_file, 'r') as f:
         prompt_text = f.read()
@@ -72,7 +77,7 @@ def gen_full_text(srt_file):
         full_txt += line.text + '\n'
     return [full_txt, len(full_txt)]
 
-def run_model(full_text, model_select, system_prompt, user_prompt,  temperature=0.1, num_ctx=30000,keep_alive=-1, num_predict=768):
+def run_model(full_text, model_select, system_prompt, user_prompt,  temperature=0.1, num_ctx=30000,keep_alive=-1, num_predict=3000):
     response = ollama.chat(model=model_select, messages=[
 
         {'role': 'system', 'content': system_prompt},
@@ -137,6 +142,14 @@ def invert_find(short_text, short_post_text, srt_text, fuzz_param):
     #print(subs_out.to_string('srt'))
     return subs_out.to_string('srt')
 
+# def merge_sys_prompt(pre, input, post):
+#     # get input line by line
+#     input_lines = input.split('\n')
+#     out_lines = []
+#     for i in range(len(input_lines)):
+#         out_lines.append(f"\n第{i+1}步，从字幕中找到关于：\n" + input_lines[i] )
+#     output = pre.strip() + "".join(out_lines) + post
+#     return output
 def get_file_list(directory):
     """获取指定目录下的所有文件名列表"""
     files = [f for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))]
@@ -172,11 +185,41 @@ def edit_clips(srt_file, video_file):
     #demo.load(None,None,None,js=scripts)
 
     return "http://127.0.0.1:7860/file="+ output_file
+def download_clips(srt_file, video_file):
+    video_file = 'video/' + video_file
+    print("merge clips")
+    subs = pysubs2.SSAFile.from_string(srt_file)
+#subs = pysubs2.load('cliped_srt/clip1.srt')
+    
+    # get current timestamp as second
+    ts = int(time.time())
+    output_file = 'stream' + f'/output_{ts}.mp4'
 
-def merge_sys_prompt(pre, input, post):
-    output = pre.strip() + input.strip() + post.strip()
-    return output
+    clips = []
+    for i in range(len(subs)):
+        sub1 = subs[i]
+        st = datetime.fromtimestamp(sub1.start/1000, pytz.timezone('utc'))
+        ed = datetime.fromtimestamp(sub1.end/1000, pytz.timezone('utc'))
+        start_time = st.strftime('%H:%M:%S.%f')[:-3] #'00:00:12.1' # Start time for trimming (HH:MM:SS)
+        end_time = ed.strftime('%H:%M:%S.%f')[:-3] # End time for trimming (HH:MM:SS)
+        print(start_time, end_time	)
+        clips.append(ffmpeg.input(video_file,  ss=start_time, to=end_time)) #hwaccel = 'cpu'
 
+    video_concat = ffmpeg.concat(*[stream['v'] for stream in clips], v=1, a=0).node
+    audio_concat = ffmpeg.concat(*[stream['a'] for stream in clips], v=0, a=1).node
+    
+    output = ffmpeg.output(video_concat['v'], audio_concat['a'], output_file,format='mp4',  vcodec='h264_nvenc', init_hw_device="cuda:1") #, vcodec='h264_nvenc', acodec='copy')
+    output = ffmpeg.overwrite_output(output) 
+    
+    ffmpeg.run(output)
+
+    #demo.load(None,None,None,js=scripts)
+
+    return output_file
+
+dynamic_prompts = []
+dynamic_outputs = []
+dynamic_btns = []
 callback = gr.CSVLogger()
 with gr.Blocks() as demo:
     
@@ -185,15 +228,16 @@ with gr.Blocks() as demo:
 
 
             srt_file = gr.File(label="SRT File", file_types=[".srt"])
-            video_path = gr.Textbox(value="./video", label="Target Directory")
-            video_file = gr.File(label="Video File", file_types=[".mp4"])
-            save_video_btn = gr.Button("upload Video")
+            video_path = gr.Textbox(value="./video", label="Target Directory", visible=True)
+            video_file = gr.File(label="Video File", file_types=[".mp4"], visible=True)
+            save_video_btn = gr.Button("upload Video", visible=True)
         with gr.Column(scale=2):
             with gr.Row():
-                model_select = gr.Dropdown(["qwen2:72b-instruct", "gemma2:27b-instruct-q4_0", "deepseek-v2:16b"], scale=2, label="Model", value="qwen2:72b-instruct")
+                model_select = gr.Dropdown(["qwen2:72b-instruct","llama3.1:70b-instruct-q2_K", "gemma2:27b-instruct-q4_0", "deepseek-v2:16b"], scale=2, label="Model", value="qwen2:72b-instruct")
                 temperature = gr.Slider(0, 1, value=0.1, step=0.1, label="Temperature")
                 ctx_num = gr.Slider(1000, 40000, value=28092, step=64, label="context num")
                 keep_alive = gr.Dropdown([-1, 0, 50], label="Keep Live", value=-1)
+                pred_num = gr.Slider(10, 4000, value=150, step=1, label="predict num")
             with gr.Row():
                 with gr.Column():
                     srt_text_len = gr.Number(label="Length")
@@ -227,7 +271,29 @@ with gr.Blocks() as demo:
             
         with gr.Column():
             step_1_output = gr.Textbox(label="Step 1 Output", autoscroll=False)
+    gr.HTML("<hr>")
     with gr.Row():
+
+        @gr.render(inputs=[gr.Text(step_2_sys_prompt_pre, visible=False), step_1_output, gr.Text(step_2_sys_prompt_post, visible=False)])
+        def add_sys_prompt(pre, input, post):
+            # get input line by line
+            input_lines = input.split('\n')
+            with gr.Column():
+                for i in range(len(input_lines)) :
+                    with gr.Row():
+                        sys_prompt = pre+ input_lines[i] + ""+post
+                        #dynamic_prompts.append()
+                        p = gr.Textbox(sys_prompt,scale=3)
+                        o = gr.Textbox(i, scale=7)
+                        #dynamic_outputs.append()
+                        with gr.Column():
+                            btn = gr.Button("生成",scale=1)
+                            save_btn = gr.Button("保存",scale=1)
+                        #dynamic_btns.append()
+                        save_btn.click(fn=temp_save, inputs=[o, short_text], outputs=[short_text])
+                        btn.click(fn=run_model, inputs=[full_text, model_select, p, step_1_usr_prompt, temperature, ctx_num, keep_alive, pred_num], outputs=o)
+
+    with gr.Row(visible=False):
         with gr.Column():
             step_2_sys_prompt = gr.Textbox(label="Step 2 System Prompt", value=step_2_sys_prompt_pre)
             step_2_usr_prompt = gr.Textbox(label="Step 2 User Prompt", value=default_usr_prompt, visible=False)
@@ -255,14 +321,17 @@ with gr.Blocks() as demo:
             invert_srt_text = gr.Textbox(label="精彩视频时间轴")
         with gr.Column():
             video_selected = gr.Dropdown(get_file_list("video"), label="Video List")
-            clips_btn = gr.Button("合并视频")
+            clips_btn = gr.Button("生成预览视频")
             #video = gr.HTML("<video width='640' height='478' controls autoplay></video>")
             #video = gr.Video()
             s_video = StreamVideo()
+            download_btn = gr.Button("生成下载视频")
+            d_video = gr.File()
 
-    step_1_output.change(fn=merge_sys_prompt, inputs=[gr.Text(step_2_sys_prompt_pre, visible=False), step_1_output, gr.Text(step_2_sys_prompt_post, visible=False)], outputs=step_2_sys_prompt)
-    step_1_btn.click(fn=run_model, inputs=[full_text, model_select, step_1_sys_prompt, step_1_usr_prompt, temperature, ctx_num, keep_alive], outputs=step_1_output)
-    step_2_btn.click(fn=run_model, inputs=[full_text, model_select, step_2_sys_prompt, step_2_usr_prompt, temperature, ctx_num, keep_alive], outputs=step_2_output)
+    
+    #step_1_output.change(fn=merge_sys_prompt, inputs=[gr.Text(step_2_sys_prompt_pre, visible=False), step_1_output, gr.Text(step_2_sys_prompt_post, visible=False)], outputs=step_2_sys_prompt)
+    step_1_btn.click(fn=run_model, inputs=[full_text, model_select, step_1_sys_prompt, step_1_usr_prompt, temperature, ctx_num, keep_alive, pred_num], outputs=step_1_output)
+    step_2_btn.click(fn=run_model, inputs=[full_text, model_select, step_2_sys_prompt, step_2_usr_prompt, temperature, ctx_num, keep_alive, pred_num], outputs=step_2_output)
 
     step_2_output.change(fn=lambda x: x, inputs=[step_2_output], outputs=[short_text])
     step_2_output.change(fn=lambda x: len(x), inputs=[step_2_output], outputs=[step_2_output_len])
@@ -282,7 +351,7 @@ with gr.Blocks() as demo:
     
     edit_btn.click(fn=invert_find, inputs=[short_text, short_post_text, srt_text, fuzz_param], outputs=invert_srt_text)
     clips_btn.click(fn=edit_clips, inputs=[invert_srt_text, video_selected], outputs=s_video)
-
+    download_btn.click(fn=download_clips, inputs=[invert_srt_text, video_selected], outputs=d_video)
     post_btn.click(fn=post_run, inputs=[short_text, model_select, post_prompt_text, post_user_text, temperature, ctx_num,  keep_alive], outputs=short_post_text)
     #greet_btn.click(fn=greet, inputs=name, outputs=output, api_name="greet")
 

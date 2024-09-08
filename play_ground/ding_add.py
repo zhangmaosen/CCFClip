@@ -4,9 +4,10 @@ import sys
 
 from typing import List
 
-from alibabacloud_dingtalk.oauth2_1_0.client import Client as dingtalkoauth2_1_0Client
+from alibabacloud_dingtalk.drive_1_0.client import Client as dingtalkdrive_1_0Client
 from alibabacloud_tea_openapi import models as open_api_models
-from alibabacloud_dingtalk.oauth2_1_0 import models as dingtalkoauth_2__1__0_models
+from alibabacloud_dingtalk.drive_1_0 import models as dingtalkdrive__1__0_models
+from alibabacloud_tea_util import models as util_models
 from alibabacloud_tea_util.client import Client as UtilClient
 
 
@@ -15,7 +16,7 @@ class Sample:
         pass
 
     @staticmethod
-    def create_client() -> dingtalkoauth2_1_0Client:
+    def create_client() -> dingtalkdrive_1_0Client:
         """
         使用 Token 初始化账号Client
         @return: Client
@@ -24,19 +25,21 @@ class Sample:
         config = open_api_models.Config()
         config.protocol = 'https'
         config.region_id = 'central'
-        return dingtalkoauth2_1_0Client(config)
+        return dingtalkdrive_1_0Client(config)
 
     @staticmethod
     def main(
         args: List[str],
     ) -> None:
         client = Sample.create_client()
-        get_access_token_request = dingtalkoauth_2__1__0_models.GetAccessTokenRequest(
-            app_key='dingmvzs45zhvrtkw8kw',
-            app_secret='As0fTjHKbZBNyou3J23zTYtlAGOrIxHPytnbX-GoAWwZh90lqDnBzr1V63PI_A7t'
+        add_space_headers = dingtalkdrive__1__0_models.AddSpaceHeaders()
+        add_space_headers.x_acs_dingtalk_access_token = 'd6b6ac7bf5833a8ea091436adf4e4518'
+        add_space_request = dingtalkdrive__1__0_models.AddSpaceRequest(
+            name='maosen',
+            union_id='sKUPRiijiSrqsuwqcPiSdbeNwiXxx'
         )
         try:
-            return client.get_access_token(get_access_token_request)
+            return client.add_space_with_options(add_space_request, add_space_headers, util_models.RuntimeOptions())
         except Exception as err:
             if not UtilClient.empty(err.code) and not UtilClient.empty(err.message):
                 # err 中含有 code 和 message 属性，可帮助开发定位问题
@@ -47,12 +50,14 @@ class Sample:
         args: List[str],
     ) -> None:
         client = Sample.create_client()
-        get_access_token_request = dingtalkoauth_2__1__0_models.GetAccessTokenRequest(
-            app_key='dingeqqpkv3xxxxxx',
-            app_secret='GT-lsu-taDAxxxsTsxxxx'
+        add_space_headers = dingtalkdrive__1__0_models.AddSpaceHeaders()
+        add_space_headers.x_acs_dingtalk_access_token = 'd6b6ac7bf5833a8ea091436adf4e4518'
+        add_space_request = dingtalkdrive__1__0_models.AddSpaceRequest(
+            name='maosen',
+            union_id='sKUPRiijiSrqsuwqcPiSdbeNwiXxx'
         )
         try:
-            await client.get_access_token_async(get_access_token_request)
+            await client.add_space_with_options_async(add_space_request, add_space_headers, util_models.RuntimeOptions())
         except Exception as err:
             if not UtilClient.empty(err.code) and not UtilClient.empty(err.message):
                 # err 中含有 code 和 message 属性，可帮助开发定位问题
@@ -60,5 +65,4 @@ class Sample:
 
 
 if __name__ == '__main__':
-    out = Sample.main(sys.argv[1:])
-    print(out)
+    print(Sample.main(sys.argv[1:]))
