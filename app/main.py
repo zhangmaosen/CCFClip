@@ -22,22 +22,17 @@ post_user_prompt = '''
 '''
 
 step_1_sys_prompt = '''
-你是科技媒体的资深编辑，请分析出字幕中的精彩内容，从精彩内容中总结出小标题并输出，输出的小标题数量不要超过8个。注意减少对原理性知识的字幕裁剪.
-输出的格式为：
-<小标题1>
-<小标题2>
-<...>
-<小标题8>
+你是科技媒体的资深编辑，请分析出字幕中的精彩内容，从精彩内容中总结出标题并输出，输出的标题数量不要超过8个。注意减少对原理性知识的字幕裁剪.
+输出的格式为：注意<和>是连接符
+<标题1>
 '''
 
-step_2_sys_prompt_pre = '''
-你是一个演讲类视频的字幕分析剪辑器，输入视频的字幕。从字幕中找到关于
+step_2_sys_prompt_pre = '''你是一个演讲类视频资深编辑，你对精彩的定义是精辟的定义或者独到的问答或者是通俗易懂的过程描述或者是科技行业的精彩定义。输入视频的速记稿。从速记稿中找到表达
 '''
 step_2_sys_prompt_post = '''
-主题的字幕裁剪出来。注意保持裁剪的完整性，注意裁剪过程不要对字幕进行改写或总结，注意减少对原理性知识的字幕裁剪，注意如果从字幕中没有找到就不要裁剪出来，输出为空。
-注意严格按照格式，按行输出裁剪出来的字幕，输出格式为：
-* "输出的字幕1"
-* "输出的字幕2"
+含义的精彩且连续的完整片段并输出。注意没有找到就输出"没有找到"并且马上停止输出。注意不要改写找到的片段的文字。
+输出文本，按照以下格式，注意"是连接符：
+* "文本1"
 '''
 def save_video(video, target_path):
     """
@@ -246,14 +241,14 @@ with gr.Blocks() as demo:
                     text_len = gr.Number(label="Text Length")
                     full_text = gr.Textbox(label="Full Text", autoscroll=False, max_lines=10)
             gen_btn = gr.Button("提取全文内容")
-    with gr.Row(visible=False):
+    with gr.Row(visible=True):
         
 
         with gr.Column(scale=6):
             default_sys_prompt = load_sys_prompt("sys_prompts/best_prompt.txt")
             sys_prompt_text = gr.Textbox(label="System Prompt", value=default_sys_prompt)
             sys_prompt_file = gr.File(label="System Prompt File")
-        with gr.Column(scale=4):
+        with gr.Column(scale=4, visible=True):
             default_usr_prompt = load_user_prompt("usr_prompts/user_prompt.txt")
             user_prompt_text = gr.Textbox(label="User Prompt", value=default_usr_prompt)
             user_prompt_file = gr.File(label="User Prompt File")
@@ -355,4 +350,4 @@ with gr.Blocks() as demo:
     post_btn.click(fn=post_run, inputs=[short_text, model_select, post_prompt_text, post_user_text, temperature, ctx_num,  keep_alive], outputs=short_post_text)
     #greet_btn.click(fn=greet, inputs=name, outputs=output, api_name="greet")
 
-demo.launch() 
+demo.launch(server_name='0.0.0.0') 
