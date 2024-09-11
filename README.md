@@ -1,4 +1,10 @@
-# CCFClip
-use LLM to cut the long video to short video
+# 项目初衷
 
-This is an experiments projects for CCF. Because there are a lot of long technical video in CCF, we want to make these videos more valuable.
+由于CCF留存了大量的有价值的技术分享类长视频但是都存在云盘上吃灰，促使我在CCF（中国计算机学会）工作时做这个实验性小工具，借鉴了阿里的funclip这个项目。目的就是利用LLM的能力把长视频剪辑成易于传播的短视频。
+
+工具的基本流程是：
+1. 用asr从视频中抽取字幕文件
+2. 利用llm分析字幕文件中的精彩片段
+3. 根据精彩片段定位到视频剪辑输出
+
+   
