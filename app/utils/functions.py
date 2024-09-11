@@ -39,31 +39,32 @@ def gen_full_text(srt_file):
     return [ len(full_txt), full_txt, subs.to_string('srt')]
 
 def gen_key_words( target, like):
-    format_str = """你是严格按照工作要求的句子剪辑器。你的输入是现场演讲的速记稿。你的工作需要分步骤完成：
-* 对速记稿从头到尾分析后，根据{}人群筛选出精彩案例
-* 根据{}的爱好，从上一步的案例中再筛选出不超过10个的案例标题并输出案例解读和案例内容中的日常物品
+    format_str = """你是严格按照工作要求的句子剪辑器。你的输入是现场演讲的速记稿。注意你需要对速记稿从前到后分析后，才能开始剪辑。你需要发现打动人心的文字或者案例。你的工作需要分步骤完成：
+* 面向{}人群的需求，输出不超过7个片段的小标题，输出案例摘要，案例关键词，输出案例内容中的日常物品
+* 根据{}的喜好，从上一步的案例中再筛选出不超过5个的案例并输出
 注意如果没有找到就输出没有并终止输出。注意匹配出的句子需要保持原文。注意输出格式：
--  案例标题
+-  “输出”
 - """
     return format_str.format(target, like)
     
-def gen_system_prompt(target, like, style, key_words):
+def gen_system_prompt(target, like, style, key_words, topic):
     if key_words == "":
-        return f"""你是严格按照工作要求的句子剪辑器。你的输入是现场演讲的速记稿。你的工作需要分步骤完成：
-* 对速记稿从头到尾分析后，根据{target}人群筛选出精彩案例
-* 根据{like}的爱好，从上一步的案例中再筛选出不超过5个的案例和案例对应的原文
-* 改编成适合{style}风格的案例输出
-注意如果没有找到就输出没有并终止输出。注意匹配出的句子需要保持原文。注意输出格式：
--  案例 - 原文
-- """
-    else: 
-        prev = """你是严格按照工作要求的句子剪辑器。你的输入是现场演讲的速记稿。你的工作需要分步骤完成：\n"""
+        prev = """你是严格按照工作要求的句子剪辑器。你的输入是现场演讲的速记稿。注意输出的是速记稿中的原文段落，注意需要对输出的内容添加上标点符号。你的工作需要分步骤完成：\n"""
         content = ""
         for key in key_words.split(' '):
          
-            content += f"""* 输出 {key} 所在的段落\n* 输出它的前一个段落\n* 输出它的后一个段落\n* 合并所有的输出结果并输出\n"""
-        post = """注意如果没有找到就输出没有并终止输出。注意匹配出的句子需要保持原文。注意输出格式：
-- “输出”"""
+            content += f"""* 输出 '{topic}' 主题匹配的全部原文\n* 输出它的前一个段落\n* 输出它的后一个段落\n"""
+        post = """注意如果没有找到就输出没有并终止输出。注意匹配出的句子需要保持原文。注意输出格式，\“\”是连接符号：
+- 输出“每步的输出”"""
+        return prev + content + post
+    else: 
+        prev = """你是严格按照工作要求的句子剪辑器。你的输入是现场演讲的速记稿。注意输出的是速记稿中的原文段落，注意需要对输出的内容添加上标点符号。你的工作需要分步骤完成：\n"""
+        content = ""
+        for key in key_words.split(' '):
+         
+            content += f"""* 输出 {key} 所在的段落\n* 输出它的前一个段落\n* 输出它的后一个段落\n"""
+        post = """注意如果没有找到就输出没有并终止输出。注意匹配出的句子需要保持原文。注意输出格式，\“\”是连接符号：
+- 输出“每步的输出”"""
         return prev + content + post
 def call_stream_with_messages(full_text, model_select, system_prompt, user_prompt,  temperature=0.1, num_predict=3000, key = None ):
     print('call online model')
