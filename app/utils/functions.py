@@ -1,5 +1,7 @@
+
 import pysubs2
-import ollama
+
+from ollama import Client, AsyncClient
 from rapidfuzz import fuzz
 from datetime import datetime
 import pytz
@@ -11,6 +13,7 @@ import dashscope
 from gradio_streamvideo import StreamVideo
 import time
 from http import HTTPStatus
+import asyncio
 def save_video(video, target_path):
     """
     Saves the uploaded video to the specified target path.
@@ -31,11 +34,73 @@ def load_srt_file(srt_file):
         srt_text = f.read()
     return [srt_text, len(srt_text)]
 
+from langchain_experimental.text_splitter import SemanticChunker
+from langchain_ollama import OllamaEmbeddings
+
+
+from langchain_core.documents import BaseDocumentTransformer, Document
+import itertools
+def chunk_run_model(system_prompt,docs, model_select,  user_prompt,  temperature=0.1, num_ctx=30000,keep_alive=-1, num_predict=150):
+    all = ""
+    for doc in docs:
+
+        if len(doc.page_content) <=2:
+            continue
+        #print(f"doc is <{doc.page_content}>")
+        for out in  run_model(system_prompt, doc.page_content, model_select,  user_prompt,  temperature=temperature, num_ctx=num_ctx,keep_alive=keep_alive, num_predict=num_predict):
+            yield all+f"{out.strip()}"
+        all += f"{out.strip()}" + "\n"
+        yield all
+
+def load_d_templates(d_templates):
+    t_p_dic ={
+        "科普类":'''你是一名科普类短视频博主，你的主要观众在小红书。你需要从科技类演讲的速记稿中寻找适合做科普短视频的案例和包含案例前因后果的具体文字。你需要对速记稿中的每一个案例内容进行仔细打分，得分点如下：
+1. 故事情节的完整程度，加0到10分
+3. 激发读者的画面感的生动程度，加0到10分
+4. 细节动作描写的连贯程度，加0到10分
+5. 文字中提到日常工作生活会用到的物品的流行程度，加0到10分
+6. 问题解决前后对比的差异程度，加0-10分
+7. 面向观众人群理解的通俗程度，加0-10分
+打分过程示例：
+得分点1得分5分，得分点2得分3分，得分点3得分0分。最后得分：5+3+0=8 分
+你需要一步一步的思考如何完成工作，先找出符合需求的案例进行打分，再输出得分最高的5个案例。
+输出的格式如下：
+第一步：找出案例并打分
+1. 案例：[案例的具体文字]，得分点：[得分点]，分数：[分数]，
+1. 案例：[案例的具体文字]，得分点：[得分点]，分数：[分数]，
+第二步：输出得分最高的5个案例''',
+
+
+        "教培类":'''你是一名科普类短视频博主，你的主要观众在小红书。你需要从科技类演讲的速记稿中寻找适合做科普短视频的案例和包含案例前因后果的具体文字。你需要对速记稿中的每一个案例内容进行仔细打分，注意你打分的评价标准是参加信息学竞赛的家长的接受度和喜爱程度。得分点如下：
+1. 故事情节的完整程度，加0到10分
+3. 激发读者的画面感的生动程度，加0到10分
+4. 细节动作描写的连贯程度，加0到10分
+5. 文字中提到日常工作生活会用到的物品的流行程度，加0到10分
+6. 问题解决前后对比的差异程度，加0-10分
+7. 面向观众人群理解的通俗程度，加0-10分
+8. 引发家长的焦虑程度，加0-10分
+打分过程示例：
+得分点1得分5分，得分点2得分3分，得分点3得分0分。最后得分：5+3+0=8 分
+你需要一步一步的思考如何完成工作，先找出符合需求的案例进行打分，再输出得分最高的5个案例。
+输出的格式如下：
+第一步：找出案例并打分
+1. 案例：[案例的具体文字]，得分点：[得分点]，分数：[分数]，
+1. 案例：[案例的具体文字]，得分点：[得分点]，分数：[分数]，
+第二步：输出得分最高的5个案例''',
+
+
+
+        "爱国类":"",
+    }
+    return  t_p_dic[d_templates]
 def gen_full_text(srt_file):
     subs = pysubs2.load(srt_file)
     full_txt = ''
     for line in subs:
         full_txt += line.text + '\n'
+
+    #docs = semantic_chunk(full_txt)
+    #print(docs)
     return [ len(full_txt), full_txt, subs.to_string('srt')]
 
 def gen_key_words( target, like):
@@ -93,37 +158,58 @@ def call_stream_with_messages(full_text, model_select, system_prompt, user_promp
                 response.request_id, response.status_code,
                 response.code, response.message
             ))
-def run_model(system_prompt, full_text, model_select, user_prompt,  temperature=0.1, num_ctx=30000,keep_alive=-1, num_predict=150, local_or_online='local', key=None):
+
+async def run_model(system_prompt, full_text, model_select, user_prompt,  temperature=0.1, num_ctx=30000,keep_alive=-1, num_predict=150, local_or_online='local', key=None, stream=False):
     if local_or_online == 'local':
         pre_out = ""
-        response = ollama.chat(model=model_select, messages=[
+        ollama = AsyncClient()
+        # response = ollama.chat(model=model_select, messages=[
 
-            {'role': 'system', 'content': system_prompt},
-            {'role': 'user', 'content': user_prompt + full_text }
-        ],options= {
-            "num_ctx": num_ctx ,
-            "temperature" : temperature,
-            'num_predict' : num_predict
-        }, keep_alive=keep_alive, stream=True)
-        for chunk in response:
-            pre_out = pre_out + chunk['message']['content']
-            yield pre_out
+        #     {'role': 'system', 'content': system_prompt},
+        #     {'role': 'user', 'content': user_prompt + full_text }
+        # ],options= {
+        #     "num_ctx": num_ctx ,
+        #     "temperature" : temperature,
+        #     'num_predict' : num_predict
+        # }, keep_alive=keep_alive, stream=True)
+        # for chunk in response:
+        #     pre_out = pre_out + chunk['message']['content']
+        #     yield pre_out
+        try:
+            async for chunk in await ollama.chat(model=model_select, messages=[
+                {'role': 'system', 'content': system_prompt},
+                {'role': 'user', 'content': user_prompt.format(full_text)  }
+            ],options= {
+                "num_ctx": num_ctx ,
+                "temperature" : temperature,
+                'num_predict' : num_predict
+            }, keep_alive=keep_alive, stream=True):
+                if stream == False:
+                    pre_out = pre_out + chunk['message']['content']
+                else:
+                    yield chunk['message']['content']
+                #print(pre_out)
+                yield pre_out
+        except TimeoutError as t:
+            
+            print(t)
+    #print(part['message']['content'], end='', flush=True)
     elif local_or_online == 'online':
          
-        yield from call_stream_with_messages(full_text, model_select, system_prompt, user_prompt,  temperature, num_predict, key)
+        yield  call_stream_with_messages(full_text, model_select, system_prompt, user_prompt,  temperature, num_predict, key)
 
 
 
 def invert_find(short_text,srt_text, fuzz_param):
 
     last_cursor = 0
-    subs = pysubs2.SSAFile.from_string(srt_text)                                      
+    subs = pysubs2.SSAFile.from_string(srt_text, 'srt')                                      
     subs_out = pysubs2.SSAFile()
     # read short_text by line
     for line in short_text.split('\n'):
-        matches = re.findall(r'“(.*?)”', line)
+        matches = re.findall(r'"(.*?)"', line)
         for match in matches:
-            split_text = re.split(r'[，,、？。！…：；]', match)
+            split_text = re.split(r'[，,、？ 。！…：；]', match)
             
             for seg in split_text:
                 #print(f"seg is {seg}")
@@ -145,7 +231,7 @@ def get_file_list(directory):
     """获取指定目录下的所有文件名列表"""
     files = [f for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))]
     return files
-def gen_prev_video(srt_file, video_file):
+def gen_prev_video(srt_file, video_file, json_info):
     video_file = 'video/' + video_file
     print("merge clips")
     subs = pysubs2.SSAFile.from_string(srt_file)
@@ -174,8 +260,8 @@ def gen_prev_video(srt_file, video_file):
     ffmpeg.run(output)
 
     #demo.load(None,None,None,js=scripts)
-
-    return "http://127.0.0.1:7860/file="+ output_file
+    uri = json_info["url"]
+    return f"/file="+ output_file
 def gen_download_video(srt_file, video_file):
     video_file = 'video/' + video_file
     print("merge clips")
