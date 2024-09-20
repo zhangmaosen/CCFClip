@@ -3,6 +3,22 @@ import chromadb
 from langchain_ollama import OllamaEmbeddings
 
 from langchain_chroma import Chroma
+from tinydb import TinyDB, Query
+import json
+def load_workspace(worksapce_name, idx = -1, db_name = "ccfclip"):
+    db = TinyDB(f"./work_db/{db_name}.json")
+    wk = Query()
+    if db.search(wk.wk_name == worksapce_name) == []:
+        return {}
+    else:
+        print("load workspace {}".format(db.search(wk.wk_name == worksapce_name)[-1]))
+        return db.search(wk.wk_name == worksapce_name)[-1]
+    
+def insert_workspace(json_data, db_name="ccfclip"):
+    db = TinyDB(f"./work_db/{db_name}.json")
+    wk = Query()
+    print(json_data)
+    db.insert(json_data)
 
 def init_chroma_db(db_name):
     chroma_client = chromadb.HttpClient(host='localhost', port=8000)    

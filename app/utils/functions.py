@@ -231,7 +231,7 @@ def get_file_list(directory):
     """获取指定目录下的所有文件名列表"""
     files = [f for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))]
     return files
-def gen_prev_video(srt_file, video_file, json_info):
+def gen_prev_video(srt_file, video_file):
     video_file = 'video/' + video_file
     print("merge clips")
     subs = pysubs2.SSAFile.from_string(srt_file)
@@ -260,7 +260,7 @@ def gen_prev_video(srt_file, video_file, json_info):
     ffmpeg.run(output)
 
     #demo.load(None,None,None,js=scripts)
-    uri = json_info["url"]
+
     return f"/file="+ output_file
 def gen_download_video(srt_file, video_file):
     video_file = 'video/' + video_file
