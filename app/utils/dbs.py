@@ -11,13 +11,13 @@ def load_workspace(worksapce_name, idx = -1, db_name = "ccfclip"):
     if db.search(wk.wk_name == worksapce_name) == []:
         return {}
     else:
-        print("load workspace {}".format(db.search(wk.wk_name == worksapce_name)[-1]))
+        #print("load workspace {}".format(db.search(wk.wk_name == worksapce_name)[-1]))
         return db.search(wk.wk_name == worksapce_name)[-1]
     
 def insert_workspace(json_data, db_name="ccfclip"):
     db = TinyDB(f"./work_db/{db_name}.json")
     wk = Query()
-    print(json_data)
+    #print(json_data)
     db.insert(json_data)
 
 def init_chroma_db(db_name):

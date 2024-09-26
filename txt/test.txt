@@ -1,0 +1,14 @@
+Output #0, mp4, to 'stream/output_1726900066.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2mp41
+    encoder         : Lavf58.76.100
+  Stream #0:0: Video: h264 (Main) (avc1 / 0x31637661), nv12(tv, bt709, progressive), 1920x1080 [SAR 1:1 DAR 16:9], q=2-31, 2000 kb/s, 30 fps, 15360 tbn (default)
+    Metadata:
+      encoder         : Lavc58.134.100 h264_nvenc
+    Side data:
+      cpb: bitrate max/min/avg: 0/0/2000000 buffer size: 4000000 vbv_delay: N/A
+  Stream #0:1: Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 128 kb/s (default)
+    Metadata:
+      encoder         : Lavc58.134.100 aac

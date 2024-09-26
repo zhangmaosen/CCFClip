@@ -14,6 +14,7 @@ from gradio_streamvideo import StreamVideo
 import time
 from http import HTTPStatus
 import asyncio
+from moviepy.editor import *
 def save_video(video, target_path):
     """
     Saves the uploaded video to the specified target path.
@@ -93,14 +94,19 @@ def load_d_templates(d_templates):
         "爱国类":"",
     }
     return  t_p_dic[d_templates]
-def gen_full_text(srt_file):
+def gen_full_text(srt_file, path = ''):
+    # #print(f"srt_file:{srt_file}")
+    # if os.path.isabs(srt_file):
+    #     srt_file = srt_file
+    # else:
+    srt_file = os.path.join(path, srt_file)
     subs = pysubs2.load(srt_file)
     full_txt = ''
     for line in subs:
         full_txt += line.text + '\n'
 
-    #docs = semantic_chunk(full_txt)
-    #print(docs)
+
+    
     return [ len(full_txt), full_txt, subs.to_string('srt')]
 
 def gen_key_words( target, like):
@@ -230,7 +236,16 @@ def invert_find(short_text,srt_text, fuzz_param):
 def get_file_list(directory):
     """获取指定目录下的所有文件名列表"""
     files = [f for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))]
+    print(f"files is {files}")
     return files
+def move_file_to(file_name, file_path="srts" ):
+            # Ensure the directory exists
+    if not os.path.exists(file_path):
+        os.makedirs(file_path)
+    if os.path.exists(file_name):
+        new_file_name = shutil.move(file_name, file_path)
+        print(f"new_file_name is {new_file_name}")
+        return new_file_name
 def gen_prev_video(srt_file, video_file):
     video_file = 'video/' + video_file
     print("merge clips")
@@ -271,7 +286,7 @@ def gen_download_video(srt_file, video_file):
     # get current timestamp as second
     ts = int(time.time())
     output_file = 'stream' + f'/output_{ts}.mp4'
-
+    movie = VideoFileClip(video_file)
     clips = []
     for i in range(len(subs)):
         sub1 = subs[i]
@@ -280,15 +295,11 @@ def gen_download_video(srt_file, video_file):
         start_time = st.strftime('%H:%M:%S.%f')[:-3] #'00:00:12.1' # Start time for trimming (HH:MM:SS)
         end_time = ed.strftime('%H:%M:%S.%f')[:-3] # End time for trimming (HH:MM:SS)
         print(start_time, end_time	)
-        clips.append(ffmpeg.input(video_file,  ss=start_time, to=end_time)) #hwaccel = 'cpu'
+        clips.append(movie.subclip(start_time, end_time)) #hwaccel = 'cpu'
 
-    video_concat = ffmpeg.concat(*[stream['v'] for stream in clips], v=1, a=0).node
-    audio_concat = ffmpeg.concat(*[stream['a'] for stream in clips], v=0, a=1).node
+    out_clips = concatenate_videoclips(clips)
     
-    output = ffmpeg.output(video_concat['v'], audio_concat['a'], output_file,format='mp4',  vcodec='h264_nvenc', init_hw_device="cuda:1") #, vcodec='h264_nvenc', acodec='copy')
-    output = ffmpeg.overwrite_output(output) 
-    
-    ffmpeg.run(output)
+    out_clips.write_videofile(output_file, fps=24)
 
     #demo.load(None,None,None,js=scripts)
 
