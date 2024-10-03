@@ -168,7 +168,7 @@ def call_stream_with_messages(full_text, model_select, system_prompt, user_promp
 async def run_model(system_prompt, full_text, model_select, user_prompt,  temperature=0.1, num_ctx=30000,keep_alive=-1, num_predict=150, local_or_online='local', key=None, stream=False):
     if local_or_online == 'local':
         pre_out = ""
-        ollama = AsyncClient()
+        ollama = AsyncClient(host="100.103.46.96")
         # response = ollama.chat(model=model_select, messages=[
 
         #     {'role': 'system', 'content': system_prompt},
