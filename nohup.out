@@ -12820,3 +12820,262 @@ DEBUG:    [19-09-2024 19:20:47] Collection temp_db already exists, returning exi
 INFO:     [19-09-2024 19:20:47] 127.0.0.1:55764 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
 INFO:     [19-09-2024 19:20:47] 127.0.0.1:55764 - "POST /api/v1/collections/6d30c7e1-28d0-419d-9a6e-1d317401f285/query HTTP/1.1" 200
 INFO:     [19-09-2024 19:20:47] 127.0.0.1:55764 - "POST /api/v1/collections/6d30c7e1-28d0-419d-9a6e-1d317401f285/query HTTP/1.1" 200
+[1m
+
+                [38;5;069m(((((((((    [38;5;203m((((([38;5;220m####
+             [38;5;069m((((((((((((([38;5;203m((((((((([38;5;220m#########
+           [38;5;069m((((((((((((([38;5;203m((((((((((([38;5;220m###########
+         [38;5;069m(((((((((((((([38;5;203m(((((((((((([38;5;220m############
+        [38;5;069m((((((((((((([38;5;203m(((((((((((((([38;5;220m#############
+        [38;5;069m((((((((((((([38;5;203m(((((((((((((([38;5;220m#############
+         [38;5;069m(((((((((((([38;5;203m((((((((((((([38;5;220m##############
+         [38;5;069m(((((((((((([38;5;203m(((((((((((([38;5;220m##############
+           [38;5;069m(((((((((([38;5;203m((((((((((([38;5;220m#############
+             [38;5;069m(((((((([38;5;203m(((((((([38;5;220m##############
+                [38;5;069m((((([38;5;203m((((    [38;5;220m#########[0m
+
+    
+[1m
+Running Chroma
+[0m
+Saving data to: ./db
+Connect to chroma at: http://localhost:8000
+Getting started guide: https://docs.trychroma.com/getting-started
+
+
+WARNING:  [28-09-2024 09:11:15] chroma_server_nofile is set to 65535, but this is less than current soft limit of 1048576. chroma_server_nofile will not be set.
+INFO:     [28-09-2024 09:11:15] Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+DEBUG:    [28-09-2024 09:11:15] Starting component System
+DEBUG:    [28-09-2024 09:11:15] Starting component OpenTelemetryClient
+DEBUG:    [28-09-2024 09:11:15] Starting component SqliteDB
+DEBUG:    [28-09-2024 09:11:15] Starting component QuotaEnforcer
+DEBUG:    [28-09-2024 09:11:15] Starting component Posthog
+DEBUG:    [28-09-2024 09:11:15] Starting component LocalSegmentManager
+DEBUG:    [28-09-2024 09:11:15] Starting component SegmentAPI
+INFO:     [28-09-2024 09:11:15] Started server process [36056]
+INFO:     [28-09-2024 09:11:15] Waiting for application startup.
+INFO:     [28-09-2024 09:11:15] Application startup complete.
+INFO:     [28-09-2024 09:11:15] Uvicorn running on http://localhost:8000 (Press CTRL+C to quit)
+INFO:     [28-09-2024 09:11:25] 127.0.0.1:37068 - "GET / HTTP/1.1" 404
+INFO:     [28-09-2024 09:11:26] 127.0.0.1:37068 - "GET /favicon.ico HTTP/1.1" 404
+INFO:     [28-09-2024 09:11:46] 127.0.0.1:39768 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [28-09-2024 09:11:46] 127.0.0.1:39768 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+INFO:     [28-09-2024 09:11:46] 127.0.0.1:39770 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [28-09-2024 09:11:46] 127.0.0.1:39770 - "DELETE /api/v1/collections/temp_db?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [28-09-2024 09:13:01] 127.0.0.1:50736 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [28-09-2024 09:13:01] 127.0.0.1:50736 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+INFO:     [28-09-2024 09:13:01] 127.0.0.1:50746 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [28-09-2024 09:13:01] 127.0.0.1:50746 - "DELETE /api/v1/collections/temp_db?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [28-09-2024 09:13:01] 127.0.0.1:50748 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [28-09-2024 09:13:01] 127.0.0.1:50748 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+INFO:     [28-09-2024 09:13:02] 127.0.0.1:50764 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+DEBUG:    [28-09-2024 09:13:02] Collection temp_db already exists, returning existing collection.
+INFO:     [28-09-2024 09:13:02] 127.0.0.1:50764 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [28-09-2024 09:35:16] 127.0.0.1:41248 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [28-09-2024 09:35:16] 127.0.0.1:41248 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+DEBUG:    [28-09-2024 09:35:16] Collection temp_db already exists, returning existing collection.
+INFO:     [28-09-2024 09:35:16] 127.0.0.1:41254 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [28-09-2024 09:35:16] 127.0.0.1:41254 - "DELETE /api/v1/collections/temp_db?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [28-09-2024 11:49:18] 127.0.0.1:55506 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [28-09-2024 11:49:18] 127.0.0.1:55506 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+INFO:     [28-09-2024 11:49:18] 127.0.0.1:55510 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [28-09-2024 11:49:18] 127.0.0.1:55510 - "DELETE /api/v1/collections/temp_db?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [28-09-2024 11:50:43] 127.0.0.1:42124 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [28-09-2024 11:50:43] 127.0.0.1:42124 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+INFO:     [28-09-2024 11:50:43] 127.0.0.1:42130 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [28-09-2024 11:50:43] 127.0.0.1:42130 - "DELETE /api/v1/collections/temp_db?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [28-09-2024 16:04:39] 127.0.0.1:36618 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [28-09-2024 16:04:39] 127.0.0.1:36618 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+INFO:     [28-09-2024 16:04:39] 127.0.0.1:36632 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [28-09-2024 16:04:39] 127.0.0.1:36632 - "DELETE /api/v1/collections/temp_db?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [28-09-2024 16:07:19] 127.0.0.1:46948 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [28-09-2024 16:07:19] 127.0.0.1:46948 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+INFO:     [28-09-2024 16:07:19] 127.0.0.1:46950 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [28-09-2024 16:07:19] 127.0.0.1:46950 - "DELETE /api/v1/collections/temp_db?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 09:27:05] Shutting down
+INFO:     [29-09-2024 09:27:05] Waiting for application shutdown.
+DEBUG:    [29-09-2024 09:27:05] Stopping component System
+DEBUG:    [29-09-2024 09:27:05] Stopping component SegmentAPI
+DEBUG:    [29-09-2024 09:27:05] Stopping component LocalSegmentManager
+DEBUG:    [29-09-2024 09:27:05] Stopping component Posthog
+DEBUG:    [29-09-2024 09:27:05] Stopping component QuotaEnforcer
+DEBUG:    [29-09-2024 09:27:05] Stopping component SqliteDB
+DEBUG:    [29-09-2024 09:27:05] Stopping component OpenTelemetryClient
+INFO:     [29-09-2024 09:27:05] Application shutdown complete.
+INFO:     [29-09-2024 09:27:05] Finished server process [36056]
+[1m
+
+                [38;5;069m(((((((((    [38;5;203m((((([38;5;220m####
+             [38;5;069m((((((((((((([38;5;203m((((((((([38;5;220m#########
+           [38;5;069m((((((((((((([38;5;203m((((((((((([38;5;220m###########
+         [38;5;069m(((((((((((((([38;5;203m(((((((((((([38;5;220m############
+        [38;5;069m((((((((((((([38;5;203m(((((((((((((([38;5;220m#############
+        [38;5;069m((((((((((((([38;5;203m(((((((((((((([38;5;220m#############
+         [38;5;069m(((((((((((([38;5;203m((((((((((((([38;5;220m##############
+         [38;5;069m(((((((((((([38;5;203m(((((((((((([38;5;220m##############
+           [38;5;069m(((((((((([38;5;203m((((((((((([38;5;220m#############
+             [38;5;069m(((((((([38;5;203m(((((((([38;5;220m##############
+                [38;5;069m((((([38;5;203m((((    [38;5;220m#########[0m
+
+    
+[1m
+Running Chroma
+[0m
+Saving data to: ./db
+Connect to chroma at: http://localhost:8000
+Getting started guide: https://docs.trychroma.com/getting-started
+
+
+WARNING:  [29-09-2024 09:39:25] chroma_server_nofile is set to 65535, but this is less than current soft limit of 1048576. chroma_server_nofile will not be set.
+INFO:     [29-09-2024 09:39:26] Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+DEBUG:    [29-09-2024 09:39:26] Starting component System
+DEBUG:    [29-09-2024 09:39:26] Starting component OpenTelemetryClient
+DEBUG:    [29-09-2024 09:39:26] Starting component SqliteDB
+DEBUG:    [29-09-2024 09:39:26] Starting component QuotaEnforcer
+DEBUG:    [29-09-2024 09:39:26] Starting component Posthog
+DEBUG:    [29-09-2024 09:39:26] Starting component LocalSegmentManager
+DEBUG:    [29-09-2024 09:39:26] Starting component SegmentAPI
+INFO:     [29-09-2024 09:39:26] Started server process [4677]
+INFO:     [29-09-2024 09:39:26] Waiting for application startup.
+INFO:     [29-09-2024 09:39:26] Application startup complete.
+INFO:     [29-09-2024 09:39:26] Uvicorn running on http://localhost:8000 (Press CTRL+C to quit)
+INFO:     [29-09-2024 09:39:37] 127.0.0.1:44246 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 09:39:37] 127.0.0.1:44246 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 09:39:37] 127.0.0.1:44262 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 09:39:37] 127.0.0.1:44262 - "DELETE /api/v1/collections/temp_db?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 09:43:51] 127.0.0.1:55008 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 09:43:51] 127.0.0.1:55008 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 09:43:51] 127.0.0.1:55010 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+DEBUG:    [29-09-2024 09:43:51] Collection temp_db already exists, returning existing collection.
+INFO:     [29-09-2024 09:43:51] 127.0.0.1:55010 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 09:44:06] 127.0.0.1:38938 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 09:44:06] 127.0.0.1:38938 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+DEBUG:    [29-09-2024 09:44:06] Collection temp_db already exists, returning existing collection.
+INFO:     [29-09-2024 09:44:06] 127.0.0.1:38942 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 09:44:06] 127.0.0.1:38942 - "DELETE /api/v1/collections/temp_db?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 09:44:15] 127.0.0.1:55010 - "GET /api/v1/pre-flight-checks HTTP/1.1" 200
+INFO:     [29-09-2024 09:44:15] 127.0.0.1:55010 - "POST /api/v1/collections/ba95b35e-0c7c-4451-8379-22f3df7f1c55/upsert HTTP/1.1" 400
+INFO:     [29-09-2024 09:49:49] 127.0.0.1:34972 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 09:49:49] 127.0.0.1:34972 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 09:49:49] 127.0.0.1:34988 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+DEBUG:    [29-09-2024 09:49:49] Collection temp_db already exists, returning existing collection.
+INFO:     [29-09-2024 09:49:49] 127.0.0.1:34988 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 09:50:10] 127.0.0.1:34988 - "GET /api/v1/pre-flight-checks HTTP/1.1" 200
+DEBUG:    [29-09-2024 09:50:11] Starting component PersistentLocalHnswSegment
+INFO:     [29-09-2024 09:50:11] 127.0.0.1:34988 - "POST /api/v1/collections/b0ab7905-7f19-4f65-8ba8-2ba649ed869d/upsert HTTP/1.1" 200
+INFO:     [29-09-2024 09:50:52] 127.0.0.1:41596 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 09:50:52] 127.0.0.1:41596 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+DEBUG:    [29-09-2024 09:50:52] Collection temp_db already exists, returning existing collection.
+INFO:     [29-09-2024 09:50:52] 127.0.0.1:41612 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 09:50:52] 127.0.0.1:41612 - "DELETE /api/v1/collections/temp_db?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 09:50:59] 127.0.0.1:45292 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 09:50:59] 127.0.0.1:45292 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 09:50:59] 127.0.0.1:45302 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+DEBUG:    [29-09-2024 09:50:59] Collection temp_db already exists, returning existing collection.
+INFO:     [29-09-2024 09:50:59] 127.0.0.1:45302 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 09:51:00] 127.0.0.1:45302 - "GET /api/v1/pre-flight-checks HTTP/1.1" 200
+DEBUG:    [29-09-2024 09:51:00] Starting component PersistentLocalHnswSegment
+INFO:     [29-09-2024 09:51:00] 127.0.0.1:45302 - "POST /api/v1/collections/3b105a50-20db-4dba-9d28-48f869ba94b4/upsert HTTP/1.1" 200
+INFO:     [29-09-2024 09:51:12] 127.0.0.1:57302 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 09:51:12] 127.0.0.1:57302 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+DEBUG:    [29-09-2024 09:51:12] Collection temp_db already exists, returning existing collection.
+INFO:     [29-09-2024 09:51:12] 127.0.0.1:57308 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 09:51:12] 127.0.0.1:57308 - "DELETE /api/v1/collections/temp_db?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 09:51:15] 127.0.0.1:57324 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 09:51:15] 127.0.0.1:57324 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 09:51:15] 127.0.0.1:57326 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+DEBUG:    [29-09-2024 09:51:15] Collection temp_db already exists, returning existing collection.
+INFO:     [29-09-2024 09:51:15] 127.0.0.1:57326 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 09:51:16] 127.0.0.1:57326 - "GET /api/v1/pre-flight-checks HTTP/1.1" 200
+DEBUG:    [29-09-2024 09:51:16] Starting component PersistentLocalHnswSegment
+INFO:     [29-09-2024 09:51:16] 127.0.0.1:57326 - "POST /api/v1/collections/9007599d-762a-4455-b0d9-4c440c685c85/upsert HTTP/1.1" 200
+INFO:     [29-09-2024 09:51:29] 127.0.0.1:58952 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 09:51:29] 127.0.0.1:58952 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+DEBUG:    [29-09-2024 09:51:29] Collection temp_db already exists, returning existing collection.
+INFO:     [29-09-2024 09:51:29] 127.0.0.1:58962 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 09:51:29] 127.0.0.1:58962 - "DELETE /api/v1/collections/temp_db?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 09:51:33] 127.0.0.1:58976 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 09:51:33] 127.0.0.1:58976 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 09:51:33] 127.0.0.1:58988 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+DEBUG:    [29-09-2024 09:51:33] Collection temp_db already exists, returning existing collection.
+INFO:     [29-09-2024 09:51:33] 127.0.0.1:58988 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 09:51:34] 127.0.0.1:58988 - "GET /api/v1/pre-flight-checks HTTP/1.1" 200
+DEBUG:    [29-09-2024 09:51:34] Starting component PersistentLocalHnswSegment
+INFO:     [29-09-2024 09:51:34] 127.0.0.1:58988 - "POST /api/v1/collections/e567791f-ea5c-4637-8aef-60ee94c0f4f2/upsert HTTP/1.1" 200
+INFO:     [29-09-2024 09:51:44] 127.0.0.1:60194 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 09:51:44] 127.0.0.1:60194 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+DEBUG:    [29-09-2024 09:51:44] Collection temp_db already exists, returning existing collection.
+INFO:     [29-09-2024 09:51:44] 127.0.0.1:60208 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 09:51:44] 127.0.0.1:60208 - "DELETE /api/v1/collections/temp_db?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 09:56:31] 127.0.0.1:59006 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 09:56:31] 127.0.0.1:59006 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 09:56:31] 127.0.0.1:59022 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 09:56:31] 127.0.0.1:59022 - "DELETE /api/v1/collections/temp_db?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 09:57:15] 127.0.0.1:33256 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 09:57:15] 127.0.0.1:33256 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 09:57:15] 127.0.0.1:33258 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+DEBUG:    [29-09-2024 09:57:15] Collection temp_db already exists, returning existing collection.
+INFO:     [29-09-2024 09:57:15] 127.0.0.1:33258 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 09:57:16] 127.0.0.1:33258 - "GET /api/v1/pre-flight-checks HTTP/1.1" 200
+DEBUG:    [29-09-2024 09:57:16] Starting component PersistentLocalHnswSegment
+INFO:     [29-09-2024 09:57:16] 127.0.0.1:33258 - "POST /api/v1/collections/59d115d6-3f26-46a2-afc3-347961f19cfc/upsert HTTP/1.1" 200
+INFO:     [29-09-2024 09:57:16] 127.0.0.1:33266 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 09:57:16] 127.0.0.1:33266 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+DEBUG:    [29-09-2024 09:57:16] Collection temp_db already exists, returning existing collection.
+INFO:     [29-09-2024 09:57:16] 127.0.0.1:33274 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+DEBUG:    [29-09-2024 09:57:16] Collection temp_db already exists, returning existing collection.
+INFO:     [29-09-2024 09:57:16] 127.0.0.1:33274 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 09:57:42] 127.0.0.1:33274 - "GET /api/v1/pre-flight-checks HTTP/1.1" 200
+INFO:     [29-09-2024 09:57:42] 127.0.0.1:33274 - "POST /api/v1/collections/59d115d6-3f26-46a2-afc3-347961f19cfc/upsert HTTP/1.1" 200
+INFO:     [29-09-2024 09:57:53] 127.0.0.1:34754 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 09:57:53] 127.0.0.1:34754 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+DEBUG:    [29-09-2024 09:57:53] Collection temp_db already exists, returning existing collection.
+INFO:     [29-09-2024 09:57:53] 127.0.0.1:34768 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 09:57:53] 127.0.0.1:34768 - "DELETE /api/v1/collections/temp_db?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 09:57:57] 127.0.0.1:34772 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 09:57:57] 127.0.0.1:34772 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 09:57:57] 127.0.0.1:34788 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+DEBUG:    [29-09-2024 09:57:57] Collection temp_db already exists, returning existing collection.
+INFO:     [29-09-2024 09:57:57] 127.0.0.1:34788 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 09:57:57] 127.0.0.1:34788 - "GET /api/v1/pre-flight-checks HTTP/1.1" 200
+DEBUG:    [29-09-2024 09:57:57] Starting component PersistentLocalHnswSegment
+INFO:     [29-09-2024 09:57:57] 127.0.0.1:34788 - "POST /api/v1/collections/ba62fbab-5965-4fd4-b922-fdd2d3509983/upsert HTTP/1.1" 200
+INFO:     [29-09-2024 10:20:18] 127.0.0.1:57220 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 10:20:18] 127.0.0.1:57220 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+DEBUG:    [29-09-2024 10:20:18] Collection temp_db already exists, returning existing collection.
+INFO:     [29-09-2024 10:20:18] 127.0.0.1:57222 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 10:20:18] 127.0.0.1:57222 - "DELETE /api/v1/collections/temp_db?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 10:38:31] 127.0.0.1:56040 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 10:38:31] 127.0.0.1:56040 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 10:38:31] 127.0.0.1:56052 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+DEBUG:    [29-09-2024 10:38:31] Collection temp_db already exists, returning existing collection.
+INFO:     [29-09-2024 10:38:31] 127.0.0.1:56052 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 10:39:03] 127.0.0.1:60250 - "GET /api/v1/pre-flight-checks HTTP/1.1" 200
+DEBUG:    [29-09-2024 10:39:03] Starting component PersistentLocalHnswSegment
+INFO:     [29-09-2024 10:39:03] 127.0.0.1:60250 - "POST /api/v1/collections/7e06fc59-e61f-48c8-8e8b-6e963bd8be74/upsert HTTP/1.1" 200
+INFO:     [29-09-2024 10:56:00] 127.0.0.1:55766 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 10:56:00] 127.0.0.1:55766 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+DEBUG:    [29-09-2024 10:56:00] Collection temp_db already exists, returning existing collection.
+INFO:     [29-09-2024 10:56:00] 127.0.0.1:55780 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 10:56:00] 127.0.0.1:55780 - "DELETE /api/v1/collections/temp_db?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 11:09:49] 127.0.0.1:46744 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 11:09:49] 127.0.0.1:46744 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 11:09:49] 127.0.0.1:46760 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+DEBUG:    [29-09-2024 11:09:49] Collection temp_db already exists, returning existing collection.
+INFO:     [29-09-2024 11:09:49] 127.0.0.1:46760 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 11:10:23] 127.0.0.1:44654 - "GET /api/v1/pre-flight-checks HTTP/1.1" 200
+DEBUG:    [29-09-2024 11:10:23] Starting component PersistentLocalHnswSegment
+INFO:     [29-09-2024 11:10:24] 127.0.0.1:44654 - "POST /api/v1/collections/4ce89b95-904a-482f-8630-46949982ae12/upsert HTTP/1.1" 200
+INFO:     [29-09-2024 11:10:49] 127.0.0.1:39828 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 11:10:49] 127.0.0.1:39828 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+DEBUG:    [29-09-2024 11:10:49] Collection temp_db already exists, returning existing collection.
+INFO:     [29-09-2024 11:10:49] 127.0.0.1:39832 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 11:10:49] 127.0.0.1:39832 - "DELETE /api/v1/collections/temp_db?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 11:18:00] 127.0.0.1:35426 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 11:18:00] 127.0.0.1:35426 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+INFO:     [29-09-2024 11:18:00] 127.0.0.1:35434 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+DEBUG:    [29-09-2024 11:18:00] Collection temp_db already exists, returning existing collection.
+INFO:     [29-09-2024 11:18:00] 127.0.0.1:35434 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [29-09-2024 11:18:43] 127.0.0.1:33960 - "GET /api/v1/pre-flight-checks HTTP/1.1" 200
+DEBUG:    [29-09-2024 11:18:43] Starting component PersistentLocalHnswSegment
+INFO:     [29-09-2024 11:18:44] 127.0.0.1:33960 - "POST /api/v1/collections/e4bd55ce-8438-44e6-8bfd-3a5d11f0e198/upsert HTTP/1.1" 200

@@ -166,21 +166,11 @@ def call_stream_with_messages(full_text, model_select, system_prompt, user_promp
             ))
 
 async def run_model(system_prompt, full_text, model_select, user_prompt,  temperature=0.1, num_ctx=30000,keep_alive=-1, num_predict=150, local_or_online='local', key=None, stream=False):
+    print(f"full_text is {full_text}")
     if local_or_online == 'local':
         pre_out = ""
-        ollama = AsyncClient()
-        # response = ollama.chat(model=model_select, messages=[
-
-        #     {'role': 'system', 'content': system_prompt},
-        #     {'role': 'user', 'content': user_prompt + full_text }
-        # ],options= {
-        #     "num_ctx": num_ctx ,
-        #     "temperature" : temperature,
-        #     'num_predict' : num_predict
-        # }, keep_alive=keep_alive, stream=True)
-        # for chunk in response:
-        #     pre_out = pre_out + chunk['message']['content']
-        #     yield pre_out
+        ollama = AsyncClient(host="100.103.46.96")
+        print(f"full_text is {full_text}")
         try:
             async for chunk in await ollama.chat(model=model_select, messages=[
                 {'role': 'system', 'content': system_prompt},

@@ -1,0 +1,145 @@
+[1m
+
+                [38;5;069m(((((((((    [38;5;203m((((([38;5;220m####
+             [38;5;069m((((((((((((([38;5;203m((((((((([38;5;220m#########
+           [38;5;069m((((((((((((([38;5;203m((((((((((([38;5;220m###########
+         [38;5;069m(((((((((((((([38;5;203m(((((((((((([38;5;220m############
+        [38;5;069m((((((((((((([38;5;203m(((((((((((((([38;5;220m#############
+        [38;5;069m((((((((((((([38;5;203m(((((((((((((([38;5;220m#############
+         [38;5;069m(((((((((((([38;5;203m((((((((((((([38;5;220m##############
+         [38;5;069m(((((((((((([38;5;203m(((((((((((([38;5;220m##############
+           [38;5;069m(((((((((([38;5;203m((((((((((([38;5;220m#############
+             [38;5;069m(((((((([38;5;203m(((((((([38;5;220m##############
+                [38;5;069m((((([38;5;203m((((    [38;5;220m#########[0m
+
+    
+[1m
+Running Chroma
+[0m
+Saving data to: ./db
+Connect to chroma at: http://localhost:8000
+Getting started guide: https://docs.trychroma.com/getting-started
+
+
+WARNING:  [28-09-2024 09:07:10] chroma_server_nofile is set to 65535, but this is less than current soft limit of 1048576. chroma_server_nofile will not be set.
+INFO:     [28-09-2024 09:07:10] Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+DEBUG:    [28-09-2024 09:07:10] Starting component System
+DEBUG:    [28-09-2024 09:07:10] Starting component OpenTelemetryClient
+DEBUG:    [28-09-2024 09:07:10] Starting component SqliteDB
+DEBUG:    [28-09-2024 09:07:10] Starting component QuotaEnforcer
+DEBUG:    [28-09-2024 09:07:10] Starting component Posthog
+DEBUG:    [28-09-2024 09:07:10] Starting component LocalSegmentManager
+DEBUG:    [28-09-2024 09:07:10] Starting component SegmentAPI
+INFO:     [28-09-2024 09:07:10] Started server process [34009]
+INFO:     [28-09-2024 09:07:10] Waiting for application startup.
+INFO:     [28-09-2024 09:07:10] Application startup complete.
+INFO:     [28-09-2024 09:07:10] Uvicorn running on http://localhost:8000 (Press CTRL+C to quit)
+INFO:     [28-09-2024 09:07:29] 127.0.0.1:39388 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [28-09-2024 09:07:29] 127.0.0.1:39388 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+INFO:     [28-09-2024 09:07:29] 127.0.0.1:39404 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [28-09-2024 09:07:29] 127.0.0.1:39404 - "DELETE /api/v1/collections/temp_db?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [28-09-2024 09:07:37] 127.0.0.1:39418 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [28-09-2024 09:07:37] 127.0.0.1:39418 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+INFO:     [28-09-2024 09:07:37] 127.0.0.1:39426 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [28-09-2024 09:07:37] 127.0.0.1:39426 - "DELETE /api/v1/collections/temp_db?tenant=default_tenant&database=default_database HTTP/1.1" 200
+[1m
+
+                [38;5;069m(((((((((    [38;5;203m((((([38;5;220m####
+             [38;5;069m((((((((((((([38;5;203m((((((((([38;5;220m#########
+           [38;5;069m((((((((((((([38;5;203m((((((((((([38;5;220m###########
+         [38;5;069m(((((((((((((([38;5;203m(((((((((((([38;5;220m############
+        [38;5;069m((((((((((((([38;5;203m(((((((((((((([38;5;220m#############
+        [38;5;069m((((((((((((([38;5;203m(((((((((((((([38;5;220m#############
+         [38;5;069m(((((((((((([38;5;203m((((((((((((([38;5;220m##############
+         [38;5;069m(((((((((((([38;5;203m(((((((((((([38;5;220m##############
+           [38;5;069m(((((((((([38;5;203m((((((((((([38;5;220m#############
+             [38;5;069m(((((((([38;5;203m(((((((([38;5;220m##############
+                [38;5;069m((((([38;5;203m((((    [38;5;220m#########[0m
+
+    
+[1m
+Running Chroma
+[0m
+Saving data to: ./db
+Connect to chroma at: http://localhost:8000
+Getting started guide: https://docs.trychroma.com/getting-started
+
+
+WARNING:  [28-09-2024 09:08:47] chroma_server_nofile is set to 65535, but this is less than current soft limit of 1048576. chroma_server_nofile will not be set.
+INFO:     [28-09-2024 09:08:48] Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+DEBUG:    [28-09-2024 09:08:48] Starting component System
+DEBUG:    [28-09-2024 09:08:48] Starting component OpenTelemetryClient
+DEBUG:    [28-09-2024 09:08:48] Starting component SqliteDB
+DEBUG:    [28-09-2024 09:08:48] Starting component QuotaEnforcer
+DEBUG:    [28-09-2024 09:08:48] Starting component Posthog
+DEBUG:    [28-09-2024 09:08:48] Starting component LocalSegmentManager
+DEBUG:    [28-09-2024 09:08:48] Starting component SegmentAPI
+INFO:     [28-09-2024 09:08:48] Started server process [34864]
+INFO:     [28-09-2024 09:08:48] Waiting for application startup.
+INFO:     [28-09-2024 09:08:48] Application startup complete.
+INFO:     [28-09-2024 09:08:48] Uvicorn running on http://localhost:8000 (Press CTRL+C to quit)
+INFO:     [28-09-2024 09:08:52] Shutting down
+INFO:     [28-09-2024 09:08:52] Waiting for application shutdown.
+DEBUG:    [28-09-2024 09:08:52] Stopping component System
+DEBUG:    [28-09-2024 09:08:52] Stopping component SegmentAPI
+DEBUG:    [28-09-2024 09:08:52] Stopping component LocalSegmentManager
+DEBUG:    [28-09-2024 09:08:52] Stopping component Posthog
+DEBUG:    [28-09-2024 09:08:52] Stopping component QuotaEnforcer
+DEBUG:    [28-09-2024 09:08:52] Stopping component SqliteDB
+DEBUG:    [28-09-2024 09:08:52] Stopping component OpenTelemetryClient
+INFO:     [28-09-2024 09:08:52] Application shutdown complete.
+INFO:     [28-09-2024 09:08:52] Finished server process [34864]
+Exception ignored in atexit callback: <bound method Client.join of <posthog.client.Client object at 0x7fe2adb36210>>
+Traceback (most recent call last):
+  File "/home/ubuntu/miniconda3/lib/python3.12/site-packages/posthog/client.py", line 491, in join
+    consumer.join()
+  File "/home/ubuntu/miniconda3/lib/python3.12/threading.py", line 1147, in join
+    self._wait_for_tstate_lock()
+  File "/home/ubuntu/miniconda3/lib/python3.12/threading.py", line 1167, in _wait_for_tstate_lock
+    if lock.acquire(block, timeout):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt: 
+[1m
+
+                [38;5;069m(((((((((    [38;5;203m((((([38;5;220m####
+             [38;5;069m((((((((((((([38;5;203m((((((((([38;5;220m#########
+           [38;5;069m((((((((((((([38;5;203m((((((((((([38;5;220m###########
+         [38;5;069m(((((((((((((([38;5;203m(((((((((((([38;5;220m############
+        [38;5;069m((((((((((((([38;5;203m(((((((((((((([38;5;220m#############
+        [38;5;069m((((((((((((([38;5;203m(((((((((((((([38;5;220m#############
+         [38;5;069m(((((((((((([38;5;203m((((((((((((([38;5;220m##############
+         [38;5;069m(((((((((((([38;5;203m(((((((((((([38;5;220m##############
+           [38;5;069m(((((((((([38;5;203m((((((((((([38;5;220m#############
+             [38;5;069m(((((((([38;5;203m(((((((([38;5;220m##############
+                [38;5;069m((((([38;5;203m((((    [38;5;220m#########[0m
+
+    
+[1m
+Running Chroma
+[0m
+Saving data to: ./db
+Connect to chroma at: http://localhost:8000
+Getting started guide: https://docs.trychroma.com/getting-started
+
+
+WARNING:  [28-09-2024 09:08:56] chroma_server_nofile is set to 65535, but this is less than current soft limit of 1048576. chroma_server_nofile will not be set.
+INFO:     [28-09-2024 09:08:56] Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+DEBUG:    [28-09-2024 09:08:56] Starting component System
+DEBUG:    [28-09-2024 09:08:56] Starting component OpenTelemetryClient
+DEBUG:    [28-09-2024 09:08:56] Starting component SqliteDB
+DEBUG:    [28-09-2024 09:08:56] Starting component QuotaEnforcer
+DEBUG:    [28-09-2024 09:08:56] Starting component Posthog
+DEBUG:    [28-09-2024 09:08:56] Starting component LocalSegmentManager
+DEBUG:    [28-09-2024 09:08:56] Starting component SegmentAPI
+INFO:     [28-09-2024 09:08:56] Started server process [34962]
+INFO:     [28-09-2024 09:08:56] Waiting for application startup.
+INFO:     [28-09-2024 09:08:56] Application startup complete.
+INFO:     [28-09-2024 09:08:56] Uvicorn running on http://localhost:8000 (Press CTRL+C to quit)
+INFO:     [28-09-2024 09:09:03] 127.0.0.1:42516 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [28-09-2024 09:09:03] 127.0.0.1:42516 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+INFO:     [28-09-2024 09:09:03] 127.0.0.1:42530 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [28-09-2024 09:09:03] 127.0.0.1:42530 - "DELETE /api/v1/collections/temp_db?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [28-09-2024 09:09:10] 127.0.0.1:45884 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+INFO:     [28-09-2024 09:09:10] 127.0.0.1:45884 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+INFO:     [28-09-2024 09:09:10] 127.0.0.1:45890 - "POST /api/v1/collections?tenant=default_tenant&database=default_database HTTP/1.1" 200
+INFO:     [28-09-2024 09:09:10] 127.0.0.1:45890 - "DELETE /api/v1/collections/temp_db?tenant=default_tenant&database=default_database HTTP/1.1" 200

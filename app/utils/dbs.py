@@ -1,5 +1,6 @@
 
 import chromadb
+from ollama import Client, AsyncClient
 from langchain_ollama import OllamaEmbeddings
 
 from langchain_chroma import Chroma
@@ -48,7 +49,7 @@ def get_chunks(text, embeddings, threshold, sentence_split_regex='\n'):
     print(f"building chunks")
     text_splitter = SemanticChunker(embeddings,sentence_split_regex=sentence_split_regex, breakpoint_threshold_amount=threshold)
     chunks = text_splitter.create_documents([text])
-    #print(f"chunks is {chunks}")
+    print(f"chunks is {chunks}")
     idx = 0
     output_chunks = []
     for chunk in chunks:
@@ -59,8 +60,10 @@ def get_chunks(text, embeddings, threshold, sentence_split_regex='\n'):
 
 def build_chunks(db_name,text, threshold=70, model="arkohut/gte-qwen2-1.5b-instruct:q8_0"):
     init_chroma_db(db_name)
+    #ollama = AsyncClient(host="100.103.46.96")
     embeddings = OllamaEmbeddings(
     model=model,
+    base_url="100.103.46.96"
     )
     #print(f"chunks is {chunks}")
     chunks = get_chunks(text, embeddings, threshold)
@@ -77,6 +80,7 @@ def query_chunks(db_name, query, top_k=1, model="arkohut/gte-qwen2-1.5b-instruct
     chunks = []
     embeddings = OllamaEmbeddings(
         model = model,
+        base_url="100.103.46.96"
     )
     store = get_chroma_store(db_name, embeddings)
     for q in query.strip().split('\n'):
