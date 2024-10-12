@@ -5,6 +5,11 @@ from langchain_ollama import OllamaEmbeddings
 from langchain_chroma import Chroma
 from tinydb import TinyDB, Query
 import json
+
+def list_workspace(db_name = "workspace"):
+    db = TinyDB(f"./work_db/{db_name}.json")
+    q = Query()
+    return 
 def load_workspace(worksapce_name, idx = -1, db_name = "ccfclip"):
     db = TinyDB(f"./work_db/{db_name}.json")
     wk = Query()

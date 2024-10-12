@@ -177,7 +177,8 @@ with gr.Blocks(fill_width=True, css=".srt_file {height:80px}") as demo:
                 def save_workspace(model_select, temperature, context_length,  keep_alives, num_predict,
                                                                     srt_file, db_name, chunks_param, chunks_size,
                                                                       chunks_txt_box,
-                                                                      d_templates, srt_sys_prompt, srt_short_content, needed_edit_content):
+                                                                      d_templates, srt_sys_prompt, srt_short_content, needed_edit_content,
+                                                                      punctuation_sys_prompt,punctuation_user_prompt):
                     workspace = {"wk_name":"zms"}
                     model_config ={"llm": 
                                    {"model_name":model_select, "temperature":temperature, "context_length":context_length, 
@@ -187,11 +188,13 @@ with gr.Blocks(fill_width=True, css=".srt_file {height:80px}") as demo:
                                   "chunks_txt_box":chunks_txt_box, } }
                     srt_prompts_data = {"srt_prompts":{"d_templates":d_templates, "srt_sys_prompt":srt_sys_prompt, "needed_edit_content":needed_edit_content, "srt_short_content":srt_short_content}}
                 
-            
-                    insert_workspace({**workspace,**model_config, **srt_config, **srt_prompts_data}, "ccfclip")
+                    punc_prompts_data = {"punc_prompts":{"punctuation_sys_prompt":punctuation_sys_prompt, "punctuation_user_prompt":punctuation_user_prompt}}
+                    insert_workspace({**workspace,**model_config, **srt_config, **srt_prompts_data, **punc_prompts_data}, "ccfclip")
                 
                 save_workspace_btn.click(fn=save_workspace, inputs=[model_select, temperature, context_length,  keep_alives, num_predict,
                                                                     srt_file, db_name, chunks_param, chunks_size,
                                                                       chunks_txt_box, 
-                                                                      d_templates, srt_sys_prompt, srt_short_content, needed_edit_content], outputs = None)
+                                                                      d_templates, srt_sys_prompt, srt_short_content, needed_edit_content,
+                                                                      punctuation_sys_prompt,punctuation_user_prompt
+                                                                      ], outputs = None)
 demo.launch(server_name='0.0.0.0')
