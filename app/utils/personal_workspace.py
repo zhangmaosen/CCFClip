@@ -36,10 +36,15 @@ def get_workspaces(path='db/tinydb/db.json'):
     #print(f'wks_list:{wks_list}')
     return wks_list
 
+def get_workspace_by_name_ts(name, ts,  path='db/tinydb/db.json'):
+    db = TinyDB(path)
+    workspace = Query()
+    wks_list = db.search((workspace.name == name ) & (workspace.time == ts))
+    return wks_list
 def get_workspace_names():
     lists = get_workspaces()
     names = [i['name'] + ' at ' + i['time'] for i in lists]
-    print(f'names is {names}')
+    #print(f'get_workspace_names names is {names}')
     return names
 
 def get_workspace_name_by_data(data):
@@ -48,7 +53,7 @@ def get_workspace_name_by_data(data):
 def save_workspace_data(data:dict, path='db/tinydb/db.json'):
     db = TinyDB(path)
     #workspace = Query()
-    print(f' data is {data}')
+    print(f' save_workspace_data is {data}')
     # 获取当前日期和时间
     now = datetime.now()
 
@@ -56,5 +61,7 @@ def save_workspace_data(data:dict, path='db/tinydb/db.json'):
     current_time_seconds = now.strftime("%H:%M:%S")
     #print("当前时间到秒:", current_time_seconds)
     data = {**data, **{'time': current_time_seconds}}
-    print(data)
-    # db.insert(data)
+    #print(data)
+    db.insert(data)
+    
+    return data

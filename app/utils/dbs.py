@@ -49,7 +49,7 @@ def get_chunks(text, embeddings, threshold, sentence_split_regex='\n'):
     print(f"building chunks")
     text_splitter = SemanticChunker(embeddings,sentence_split_regex=sentence_split_regex, breakpoint_threshold_amount=threshold)
     chunks = text_splitter.create_documents([text])
-    print(f"chunks is {chunks}")
+    #print(f"chunks is {chunks}")
     idx = 0
     output_chunks = []
     for chunk in chunks:

@@ -105,10 +105,19 @@ def gen_full_text(srt_file, path = ''):
     for line in subs:
         full_txt += line.text + '\n'
 
-
-    
     return [ len(full_txt), full_txt, subs.to_string('srt')]
 
+def load_text_from_srt(srt_file, path = ''):
+    if srt_file is None:
+        return ""
+    #print(f"srt_file:{srt_file}")
+    srt_file = os.path.join(path, srt_file)
+    subs = pysubs2.load(srt_file)
+    full_txt = ''
+    for line in subs:
+        full_txt += line.text + '\n'
+
+    return full_txt
 def gen_key_words( target, like):
     format_str = """你是严格按照工作要求的句子剪辑器。你的输入是现场演讲的速记稿。注意你需要对速记稿从前到后分析后，才能开始剪辑。你需要发现打动人心的文字或者案例。你的工作需要分步骤完成：
 * 面向{}人群的需求，输出不超过7个片段的小标题，输出案例摘要，案例关键词，输出案例内容中的日常物品
@@ -165,12 +174,17 @@ def call_stream_with_messages(full_text, model_select, system_prompt, user_promp
                 response.code, response.message
             ))
 
-async def run_model(system_prompt, full_text, model_select, user_prompt,  temperature=0.1, num_ctx=30000,keep_alive=-1, num_predict=150, local_or_online='local', key=None, stream=False):
-    print(f"full_text is {full_text}")
+async def run_model(system_prompt, full_text, model_select, user_prompt,  temperature=0.1, num_ctx=30000,keep_alive=-1, num_predict=250, local_or_online='local', key=None, stream=False):
+    #print(f"full_text is {full_text}")
     if local_or_online == 'local':
         pre_out = ""
-        ollama = AsyncClient(host="100.103.46.96")
-        print(f"full_text is {full_text}")
+        ollama = AsyncClient() #(host="100.103.46.96")
+        print(f"full_text is {full_text}, system_prompt is {system_prompt}\
+            user_prompt is {user_prompt}\
+                temperature is {temperature}\
+                    num_ctx is {num_ctx}\
+                        num_predict is {num_predict}\
+                            ")
         try:
             async for chunk in await ollama.chat(model=model_select, messages=[
                 {'role': 'system', 'content': system_prompt},
