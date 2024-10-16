@@ -75,13 +75,18 @@ def load_workspace(worksapce_name):
     
     #return {'data':data}
 
-def save_workspace(srt_chunk, 
+def save_workspace(workspace_input,
+                   srt_chunk, 
                    srt_sub_content,
                    nice_extract_prompt_input,
                    key_sentence_prompt_input,
                    workspace):
-    print(f"workspace is {workspace}")
-    data = {**workspace, "srt_chunk":srt_chunk, "srt_sub": srt_sub_content, "extract_prompt":nice_extract_prompt_input, "key_sentence_prompt":key_sentence_prompt_input}
+    print(f"workspace is {workspace} \n workspace_input is {workspace_input}")
+    if len(workspace_input) > 0:
+        data = {**workspace, "name": workspace_input, "srt_chunk":srt_chunk, "srt_sub": srt_sub_content, "extract_prompt":nice_extract_prompt_input, "key_sentence_prompt":key_sentence_prompt_input}
+    else:
+        data = {**workspace, "srt_chunk":srt_chunk, "srt_sub": srt_sub_content, "extract_prompt":nice_extract_prompt_input, "key_sentence_prompt":key_sentence_prompt_input}
+
     print(f'data is {data}')
     data = save_workspace_data(data)
     return data
@@ -148,7 +153,7 @@ with gr.Blocks() as demo:
         .then(lambda : gr.Dropdown(label="Select Workspace", choices=get_workspace_names(), interactive=True), None, workspaces_list)\
         .then(lambda x:x['name'] + ' at ' + x['time'], workspace_data, workspaces_list)
     
-    save_workspace_btn.click(save_workspace, inputs=[srt_chunks_output, srt_sub_content, nice_extract_prompt_input, key_sentence_prompt_input, workspace_data], outputs=[workspace_data])\
+    save_workspace_btn.click(save_workspace, inputs=[workspace_input, srt_chunks_output, srt_sub_content, nice_extract_prompt_input, key_sentence_prompt_input, workspace_data], outputs=[workspace_data])\
         .then(lambda : gr.Dropdown(label="Select Workspace", choices=get_workspace_names(), interactive=True), None, workspaces_list)\
         .then(lambda x:x['name'] + ' at ' + x['time'], workspace_data, workspaces_list)
     
@@ -169,28 +174,37 @@ with gr.Blocks() as demo:
             #         value = os.path.basename(idx)
             #     return gr.Dropdown(choices=names, label="Select SRT File", value=value, interactive=True)
             
-            # def refresh_video_file_list(idx=""):
-            #     names = get_file_list("video")
-            #     if idx == "":
-            #         value = names[0] if len(names) > 0 else ""
-            #     else :
-            #         value = os.path.basename(idx)
-            #     return gr.Dropdown(choices=names, label="Select SRT File", value=value, interactive=True)
+            def refresh_video_file_list(idx=""):
+                names = get_file_list("video")
+                if idx == "":
+                    value = names[0] if len(names) > 0 else ""
+                else :
+                    value = os.path.basename(idx)
+                return gr.Dropdown(choices=names, label="Select SRT File", value=value, interactive=True)
             # demo.load(refresh_srt_file_list,None, srt_uploaded)
             # demo.load(refresh_video_file_list,None, videos_uploaded)
             # videos_uploaded.render()
-            gr.FileExplorer(root_dir="video", height=500,scale=3)
-            gr.FileExplorer(root_dir="srts", height=500, scale=3)
+            video_files = gr.FileExplorer(root_dir="video", height=500,scale=3)
+            srt_files = gr.FileExplorer(root_dir="srts", height=500, scale=3)
             video_upload.render()
             #srt_uploaded.render()
             srt_upload.render()
-
-            # srt_upload.upload(move_file_to, inputs=[srt_upload, gr.State("srts")], outputs=[]).then(
-            #     refresh_srt_file_list,srt_upload, srt_uploaded
-            # )
-            # video_upload.upload(move_file_to, inputs=[video_upload, gr.State("video")], outputs=[]).then(
-            #     refresh_video_file_list,video_upload, videos_uploaded
-            # )
+            #video_upload.upload(move_file_to, inputs=[video_upload, gr.State("video")], outputs=[])
+            srt_upload.upload(move_file_to, inputs=[srt_upload, gr.State("srts")], outputs=[]).then(
+                lambda : gr.FileExplorer(root_dir="./", height=500,scale=3),None, srt_files
+            ).then(
+                lambda : gr.FileExplorer(root_dir="srts", height=500,scale=3),None, srt_files
+            )
+            
+            video_upload.upload(move_file_to, inputs=[video_upload, gr.State("video")], outputs=[]).then(
+                lambda : gr.FileExplorer(root_dir="./", height=500,scale=3),None, video_files
+            ).then(
+                lambda : gr.FileExplorer(root_dir="video", height=500,scale=3),None, video_files
+            ).then(
+                 lambda : gr.FileExplorer(label="Video File", glob="*.mp4", root_dir='./', file_count="single", height=390),None, video_file_explorer
+            ).then(
+                 lambda : gr.FileExplorer(label="Video File", glob="*.mp4", root_dir='video', file_count="single", height=390),None, video_file_explorer
+            )
     gr.Markdown(value='''
                 第三步：     
                      
