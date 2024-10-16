@@ -120,7 +120,7 @@ with gr.Blocks() as demo:
     gr.Markdown(value='''
                 第一步：     
                      
-                1. 新建你的工作名称用来保存你的工作，工作名只能是英文并且需要大于3个字幕
+                1. 新建你的工作名称用来保存你的工作，工作名只能是英文并且需要大于3个字母
                 2. 或者从下拉框中选择已经保存的工作，继续开始工作
                 3. 可以从下拉框中选择template，这样会默认使用template中的prompt
                 4. 遇到任何问题请在 https://github.com/zhangmaosen/CCFClip/issues 提交问题，我会尽快解答
@@ -355,4 +355,4 @@ with gr.Blocks() as demo:
             d_video = gr.File()
             download_btn.click(fn=gen_download_video, inputs=[matched_srt_output, video_file_explorer], outputs=d_video)
     
-demo.launch(server_name='0.0.0.0')
+demo.launch(server_name='0.0.0.0', server_port=7777)
