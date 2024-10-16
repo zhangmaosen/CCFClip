@@ -109,7 +109,7 @@ def gen_full_text(srt_file, path = ''):
 
 def load_text_from_srt(srt_file, path = ''):
     if srt_file is None:
-        return ""
+        return ["",""]
     #print(f"srt_file:{srt_file}")
     srt_file = os.path.join(path, srt_file)
     subs = pysubs2.load(srt_file)
@@ -117,7 +117,7 @@ def load_text_from_srt(srt_file, path = ''):
     for line in subs:
         full_txt += line.text + '\n'
 
-    return full_txt
+    return [full_txt, subs.to_string('srt')]
 def gen_key_words( target, like):
     format_str = """你是严格按照工作要求的句子剪辑器。你的输入是现场演讲的速记稿。注意你需要对速记稿从前到后分析后，才能开始剪辑。你需要发现打动人心的文字或者案例。你的工作需要分步骤完成：
 * 面向{}人群的需求，输出不超过7个片段的小标题，输出案例摘要，案例关键词，输出案例内容中的日常物品
@@ -211,7 +211,7 @@ async def run_model(system_prompt, full_text, model_select, user_prompt,  temper
 
 
 def invert_find(short_text,srt_text, fuzz_param):
-
+    print(f'srt_text is {srt_text}')
     last_cursor = 0
     subs = pysubs2.SSAFile.from_string(srt_text, 'srt')                                      
     subs_out = pysubs2.SSAFile()
@@ -222,7 +222,7 @@ def invert_find(short_text,srt_text, fuzz_param):
             split_text = re.split(r'[，,、？ 。！…：；]', match)
             
             for seg in split_text:
-                #print(f"seg is {seg}")
+                print(f"seg is {seg}")
                 for i in range(last_cursor, last_cursor + len(subs)):
                     current_index = i % len(subs)
                     score = (fuzz.ratio(seg, subs[current_index].text))
@@ -240,9 +240,10 @@ def invert_find(short_text,srt_text, fuzz_param):
 def get_file_list(directory):
     """获取指定目录下的所有文件名列表"""
     files = [f for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))]
-    print(f"files is {files}")
+    #print(f"files is {files}")
     return files
 def move_file_to(file_name, file_path="srts" ):
+    print(f"move_file_to is {file_name}")
             # Ensure the directory exists
     if not os.path.exists(file_path):
         os.makedirs(file_path)
@@ -251,7 +252,7 @@ def move_file_to(file_name, file_path="srts" ):
         print(f"new_file_name is {new_file_name}")
         return new_file_name
 def gen_prev_video(srt_file, video_file):
-    video_file = 'video/' + video_file
+    video_file = video_file
     print("merge clips")
     subs = pysubs2.SSAFile.from_string(srt_file)
 #subs = pysubs2.load('cliped_srt/clip1.srt')
@@ -282,7 +283,7 @@ def gen_prev_video(srt_file, video_file):
 
     return f"/file="+ output_file
 def gen_download_video(srt_file, video_file):
-    video_file = 'video/' + video_file
+    video_file = video_file
     print("merge clips")
     subs = pysubs2.SSAFile.from_string(srt_file)
 #subs = pysubs2.load('cliped_srt/clip1.srt')
