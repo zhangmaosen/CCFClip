@@ -4,8 +4,16 @@ from utils.personal_workspace import *
 from utils.functions import *
 from utils.dbs import *
 from typing import List
+from funasr import AutoModel
+from utils.subtitle_utils import *
 
-workspaces_list = gr.Dropdown(label="Select Workspace", choices=get_workspace_names(), interactive=True, scale=2)
+funasr_model = AutoModel(model="iic/speech_seaco_paraformer_large_asr_nat-zh-cn-16k-common-vocab8404-pytorch",
+                                vad_model="damo/speech_fsmn_vad_zh-cn-16k-common-pytorch",
+                                punc_model="damo/punc_ct-transformer_zh-cn-common-vocab272727-pytorch",
+                                spk_model="damo/speech_campplus_sv_zh-cn_16k-common",
+                                disable_update=True
+                                )
+workspaces_list = gr.Dropdown(label="Select Workspace", choices=get_workspace_names(), value=None, interactive=True, scale=2)
 gr.set_static_paths("/home/userroot/dev/CCFClip/stream")
 # for video and srt upload 
 video_upload = gr.File(label="Upload Video File", file_types=['.mp4'])
@@ -113,6 +121,27 @@ def on_select(value, value_2, evt:gr.SelectData):
                         #print(evt.target.value)
                         return [gr.Textbox(value=value+'  '), value_2]
 
+def generate_srt_file(video_file):
+    input_file_name = os.path.basename(video_file)
+    input_file_name_without_ext = os.path.splitext(input_file_name)[0]
+    output_file = f"./wav/{input_file_name_without_ext}.wav"
+    try:
+        (
+            ffmpeg
+            .input(video_file)
+            .output(output_file, format='wav')
+            .run(overwrite_output=True)
+        )
+    except ffmpeg.Error as e:
+        print('stdout:', e.stdout.decode('utf8'))
+        print('stderr:', e.stderr.decode('utf8'))
+    rec_result = funasr_model.generate(input=output_file)
+    srt = generate_srt(rec_result[0]['sentence_info'])
+    #write srt content to file
+    with open(f"./srts/{input_file_name_without_ext}.srt", "w", encoding='utf-8') as file:
+        file.write(srt)
+    return f"./srts/{input_file_name_without_ext}.srt"
+
 with gr.Blocks() as demo:
     workspace_data = gr.State({})
     current_workspace_name = gr.State('')
@@ -129,15 +158,15 @@ with gr.Blocks() as demo:
     with gr.Row():
         with gr.Column(scale=2):
             with gr.Row():
-                
-                save_workspace_btn = gr.Button("Save Workspace")
+                workspace_input = gr.Textbox(label="Workspace Name", scale=2)
+                save_workspace_btn = gr.Button("Create or Save Workspace", variant="primary", size='lg')
                 workspaces_list.render()
                                 #load_workspace_btn = gr.Button("Load Workspace")
                 
         with gr.Column():
             with gr.Row():
-                workspace_input = gr.Textbox(label="Workspace Name", scale=2)
-                create_workspace_button = gr.Button("Create Workspace", scale=1)
+                
+                create_workspace_button = gr.Button("Create Workspace", scale=1, visible=False)
                 
     current_data = gr.Textbox(label="Workspace Data", inputs= workspace_data, value=lambda x:x, visible=False)
     current_name = gr.Textbox(label="Workspace Name", inputs= current_workspace_name, value=lambda x:x, visible=False) 
@@ -181,25 +210,40 @@ with gr.Blocks() as demo:
                 else :
                     value = os.path.basename(idx)
                 return gr.Dropdown(choices=names, label="Select SRT File", value=value, interactive=True)
-            # demo.load(refresh_srt_file_list,None, srt_uploaded)
-            # demo.load(refresh_video_file_list,None, videos_uploaded)
-            # videos_uploaded.render()
-            video_files = gr.FileExplorer(root_dir="video", height=500,scale=3)
-            srt_files = gr.FileExplorer(root_dir="srts", height=500, scale=3)
+            
             video_upload.render()
-            #srt_uploaded.render()
+            video_files = gr.FileExplorer(root_dir="video", file_count="single", height=500,scale=3)
+            gen_srt_btn = gr.Button("Generate SRT File")
+            srt_files = gr.FileExplorer(root_dir="srts", file_count="single", height=500, scale=3)
+            
+            
             srt_upload.render()
-            #video_upload.upload(move_file_to, inputs=[video_upload, gr.State("video")], outputs=[])
-            srt_upload.upload(move_file_to, inputs=[srt_upload, gr.State("srts")], outputs=[]).then(
+            
+            gen_srt_btn.click(generate_srt_file, video_files, srt_files).then(
                 lambda : gr.FileExplorer(root_dir="./", height=500,scale=3),None, srt_files
             ).then(
                 lambda : gr.FileExplorer(root_dir="srts", height=500,scale=3),None, srt_files
+            ).then(
+                lambda : gr.FileExplorer(label="SRT File", glob="*.srt", root_dir='./', file_count="single", height=390, scale=2),None, srt_file
+            ).then(
+                lambda : gr.FileExplorer(label="SRT File", glob="*.srt", root_dir='srts', file_count="single", height=390, scale=2),None, srt_file
+            )
+            
+            
+            srt_upload.upload(move_file_to, inputs=[srt_upload, gr.State("srts")], outputs=[]).then(
+                lambda : gr.FileExplorer(root_dir="./", height=500,scale=3),None, srt_files
+            ).then(
+                lambda : gr.FileExplorer(root_dir="srts", file_count="single", height=500,scale=3),None, srt_files
+            ).then(
+                lambda : gr.FileExplorer(label="SRT File", glob="*.srt", root_dir='./', file_count="single", height=390, scale=2),None, srt_file
+            ).then(
+                lambda : gr.FileExplorer(label="SRT File", glob="*.srt", root_dir='srts', file_count="single", height=390, scale=2),None, srt_file
             )
             
             video_upload.upload(move_file_to, inputs=[video_upload, gr.State("video")], outputs=[]).then(
                 lambda : gr.FileExplorer(root_dir="./", height=500,scale=3),None, video_files
             ).then(
-                lambda : gr.FileExplorer(root_dir="video", height=500,scale=3),None, video_files
+                lambda : gr.FileExplorer(root_dir="video", file_count="single", height=500,scale=3),None, video_files
             ).then(
                  lambda : gr.FileExplorer(label="Video File", glob="*.mp4", root_dir='./', file_count="single", height=390),None, video_file_explorer
             ).then(
@@ -355,4 +399,4 @@ with gr.Blocks() as demo:
             d_video = gr.File()
             download_btn.click(fn=gen_download_video, inputs=[matched_srt_output, video_file_explorer], outputs=d_video)
     
-demo.launch(server_name='0.0.0.0', server_port=7777)
+demo.launch(server_name='0.0.0.0')
