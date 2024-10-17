@@ -171,3 +171,6 @@ db/
 */log.csv
 
 *.wav
+
+*/nohup.out
+nohup.out
