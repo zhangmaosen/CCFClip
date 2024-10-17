@@ -1,6 +1,16 @@
 import gradio as gr
 
-with gr.Blocks() as demo:
+# Paths can be a list of strings or pathlib.Path objects
+# corresponding to filenames or directories.
+gr.set_static_paths(paths=["test/test_files/"])
 
-    d = gr.Dropdown(value= None, allow_custom_value= True, choices=["a", "b", "c"], label="Dropdown")
+# The example files and the default value of the input
+# will not be copied to the gradio cache and will be served directly.
+demo = gr.Interface(
+    lambda s: s.rotate(45),
+    gr.Image(value="test/test_files/1.jpeg", type="pil"),
+    gr.Image(),
+    examples=["test/test_files/bus.png"],
+)
+
 demo.launch()

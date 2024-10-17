@@ -280,8 +280,8 @@ def gen_prev_video(srt_file, video_file):
     ffmpeg.run(output)
 
     #demo.load(None,None,None,js=scripts)
-
-    return f"/file="+ output_file
+    #fix for gradio 5.0
+    return f"/gradio_api/file="+ output_file
 def gen_download_video(srt_file, video_file):
     video_file = video_file
     print("merge clips")
