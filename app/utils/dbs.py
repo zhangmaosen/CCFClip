@@ -76,24 +76,28 @@ def insert_chunks(chunks, embeddings, db_name):
 
     return store
 
-def query_chunks(db_name, query, top_k=1, model="arkohut/gte-qwen2-1.5b-instruct:q8_0", ):
-    chunks = []
-    embeddings = OllamaEmbeddings(
-        model = model,
-        base_url="100.103.46.96"
-    )
-    store = get_chroma_store(db_name, embeddings)
-    for q in query.strip().split('\n'):
-        print(q)
-        chunk = store.similarity_search(q,k=top_k)
-        chunk = sorted(chunk, key=lambda x: x.metadata["id"])
-        for i in range(len(chunk)):
-            print(chunk[i])
-            #replace space in page_content to comma
-            chunk[i].page_content = chunk[i].page_content.replace(" ",",")
-            chunks.append(chunk[i].page_content)
-        
-        
-        output = "\n\n".join(chunks)
-        
-        yield output
+def query_chunks(chunks, db_name, query, top_k=1, model="arkohut/gte-qwen2-1.5b-instruct:q8_0", ):
+    print(f"query_chunks {db_name} chunks is {chunks} len is {len(chunks)}")
+    if len(chunks) == 0:
+        yield "格式化的SRT Chunks未生成，请点击Format SRT Chunks按钮！"
+    else:
+        chunks = []
+        embeddings = OllamaEmbeddings(
+            model = model,
+            base_url="100.103.46.96"
+        )
+        store = get_chroma_store(db_name, embeddings)
+        for q in query.strip().split('\n'):
+            print(q)
+            chunk = store.similarity_search(q,k=top_k)
+            chunk = sorted(chunk, key=lambda x: x.metadata["id"])
+            for i in range(len(chunk)):
+                print(chunk[i])
+                #replace space in page_content to comma
+                chunk[i].page_content = chunk[i].page_content.replace(" ",",")
+                chunks.append(chunk[i].page_content)
+            
+            
+            output = "\n\n".join(chunks)
+            
+            yield output

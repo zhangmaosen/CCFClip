@@ -7,6 +7,46 @@ from typing import List
 from funasr import AutoModel
 from utils.subtitle_utils import *
 
+extract_nice_content_prompts = {
+    "Prompt模板1 提取优秀案例或者主题":'''
+你是一名科普类短视频博主，你的主要观众在小红书。你需要从科技类演讲的速记稿中寻找适合做科普短视频的案例和包含案例的连续文字。你需要认真学习下面的文字示例：
+
+适合做科普短视频的文字示例1：
+* 捕捉“墨子号”卫星上发出的光子难度有多大呢？举一个例子，相当于我坐在飞机上，拿着硬币一个个往下扔，要扔到地面的一个储蓄罐里，储蓄罐有很细的投币口，硬币还得投进去才行——我们做到了。
+文字示例1故事情节完整度10分、画面感10分和细节描述连贯10分和通俗程度10分，科学原理的通俗解释10分，以文字示例1为对应的打分标准
+
+适合做科普短视频的文字示例2：
+* 为什么电影里的黑洞看起来的是亮的，首先是距离的原因，其次是光线会绕着黑洞绕几圈再进去，有些光线会掉进黑洞，而有些会逃出来，这部分逃出来的光子就是电影中所看到的“黑洞的光”。为什么需要高速自转的黑洞，《星际穿越》的黑洞必须同时具有1亿倍的太阳质量和高速的自转，才能产生1小时=7年的效果，而且宇航员不被黑洞的潮汐力所撕碎。这是导演和科学妥协的结果。
+文字示例2对科学原理进行了通俗的解释，加10分，以文字示例2为对应的打分标准
+
+你需要对速记稿中的每一个案例内容进行仔细打分，得分点如下：
+1. 故事情节的完整程度加口语化程度，加0到10分
+3. 激发读者的画面感的生动程度，加0到10分
+4. 细节动作描写的连贯程度，加0到10分
+5. 文字中提到日常工作生活会用到的物品的流行程度或者是与我们生活中的联系紧密程度，加0到10分
+6. 问题解决前后对比的差异程度，加0-10分
+7. 将枯燥的研究过程的简化为通俗故事的程度，加0-10分
+8. 对基础概念的通俗解释让读者能够理解的程度，加0-10分
+9. 复杂的数学公式和科学专有名词越多减分越多，减0-10分
+
+打分过程示例：
+1. 算出每个打分点的得分，比如：得分点1 = 3分， 得分点2 = 2分， 得分点9 = -5分
+2. 汇总上一步给出的每个打分点的得分，需要列出算式，算式把所有得分点加和，比如：得分点1的3分 + 得分点2的2分 + 得分点9 的-5分 = 3 + 2 + (-5) = 0分
+你需要一步一步的思考如何完成工作，找出符合需求的7个案例，注意要严格按照得分点进行打分，你是严格的评审官，你要直率和严格的输出得分评价。注意每个案例要独立打分。注意列出算式
+输出的格式如下：
+1. 案例：[案例的核心内容]，得分点[得分]， 最后得分：[汇总得分]，
+1. 案例：[案例的核心内容]，得分点[得分]，最后得分： [汇总得分]，
+''',
+    "提取金句":""
+}
+
+extract_key_sentence_prompts = {
+    "Prompt模板2 关键句子提取":'''
+你是一名短视频脚本编辑，你的工作是从文本内容中找到适合作为短视频脚本的主干句子和精辟的句子并输出，注意输出的内容需要保持对过程描述的完整性，注意要原样输出找到的句子。输出格式：
+* "输出"
+...
+* "输出"'''
+}
 funasr_model = AutoModel(model="iic/speech_seaco_paraformer_large_asr_nat-zh-cn-16k-common-vocab8404-pytorch",
                                 vad_model="damo/speech_fsmn_vad_zh-cn-16k-common-pytorch",
                                 punc_model="damo/punc_ct-transformer_zh-cn-common-vocab272727-pytorch",
@@ -21,10 +61,10 @@ srt_upload = gr.File(label="Upload SRT File", file_types=['.srt'])
 # videos_uploaded = gr.Dropdown(label="Uploaded Videos", interactive=True, scale=2)
 # srt_uploaded = gr.Dropdown(label="Uploaded SRT", interactive=True, scale=2)
 # for llm
-llm_model_select = gr.Dropdown(["qwen2.5:72b-instruct","qwen2.5:32b-instruct","qwen2.5:7b-instruct"], label="Model", value="qwen2.5:7b-instruct")
+llm_model_select = gr.Dropdown(["qwen2.5:72b-instruct","qwen2.5:32b-instruct","qwen2.5:7b-instruct"], label="Model", value="qwen2.5:32b-instruct")
 llm_model_temperature = gr.Slider(minimum=0, maximum=1, step=0.1, label="Temperature")
-llm_model_context_num = gr.Slider(minimum=8096, maximum=8096*3, step=1, label="Number of Context")
-ollama_predict_num = gr.Slider(minimum=768, maximum=4096, step=64, label="Number of Predictions")
+llm_model_context_num = gr.Slider(minimum=8096*3, maximum=8096*4, step=1, label="Number of Context")
+ollama_predict_num = gr.Slider(minimum=768*2, maximum=4096, step=64, label="Number of Predictions")
 ollama_keep_alive = gr.Radio(choices=[0,-1], value=-1, label="Keep Alive Forever")
 
 # for srt file and build chunks and index
@@ -32,8 +72,7 @@ chunk_similarity_input = gr.Slider(value = 95, minimum=50, maximum=100, step=5, 
 chunk_size_input = gr.Slider(value = 200, minimum=50, maximum=400, step=10, label="Chunk Size")
 chunk_btn = gr.Button(value="Format SRT to LLM Chunks")
 srt_file = gr.FileExplorer(label="SRT File", glob="*.srt", root_dir='srts', file_count="single", height=390, scale=2)
-srt_sub_content = gr.State("")
-srt_chunks_content = gr.State("")
+
 srt_chunks_output = gr.Textbox(label="Chunks", max_lines=10)
 chunk_length_output = gr.Textbox(label="Chunk Length")
 
@@ -99,10 +138,25 @@ def save_workspace(workspace_input,
     data = save_workspace_data(data)
     return data
     
+def create_srt_file_name_pinyin(file_name):
+    if file_name is None:
+        return ""
+    file_name = os.path.basename(file_name).split(".")[0]
+    file_name_pinyin = translate_filename_to_pinyin(file_name)
+    file_name_pinyin = ''.join(filter(str.isalnum, file_name_pinyin))
+    # 截断file_name_pinyin 不要超过30个字符 不要小于3个字符
+    file_name_pinyin = file_name_pinyin[:63] if len(file_name_pinyin) > 63 else file_name_pinyin
+    # 如果file_name_pinyin 的长度小于3，则使用_补全
+    file_name_pinyin = file_name_pinyin if len(file_name_pinyin) >= 3 else file_name_pinyin + "a"*(3-len(file_name_pinyin))
     
+    # 把file_name_pinyin中的_字符替换为1
+    file_name_pinyin = file_name_pinyin.replace("_","1")
+    print(f"file_name_pinyin is {file_name_pinyin} ")
+    return file_name_pinyin
 def format_chunks(db_name, srt_txt_content, chunks_param, chunks_size):
+
     docs :List[Document] = build_chunks(db_name, srt_txt_content, chunks_param)
-    #print(f"format_chunks {chunks}")
+    print(f"format_chunks {db_name}")
     chunks = []
     idx = 0
     for doc in docs:
@@ -143,6 +197,9 @@ def generate_srt_file(video_file):
     return f"./srts/{input_file_name_without_ext}.srt"
 
 with gr.Blocks() as demo:
+    srt_sub_content = gr.State("")
+    srt_chunks_content = gr.State("")
+    srt_file_name_pinyin = gr.State("")
     workspace_data = gr.State({})
     current_workspace_name = gr.State('')
     demo.load(lambda : gr.Dropdown( choices= get_workspace_names()), None, workspaces_list)
@@ -263,16 +320,16 @@ with gr.Blocks() as demo:
                 chunk_similarity_input.render()
                 chunk_size_input.render()
                 chunk_btn.render()
-            srt_chunks_content.render()
+            #srt_chunks_content.render()
             srt_chunks_output.render()
-            srt_sub_content.render()
+            #srt_sub_content.render()
 
     srt_file.change(load_text_from_srt, inputs=[srt_file], outputs=[srt_chunks_content, srt_sub_content])\
-    .then(lambda x: "" if len(x) == 0 else x, srt_chunks_content, srt_chunks_output)\
-    .then(lambda x: len(x), inputs=[srt_chunks_output], outputs=[chunk_length_output])
+    .then(create_srt_file_name_pinyin, srt_file, srt_file_name_pinyin)\
+    .then(lambda : "", None, srt_chunks_output)
     
-    chunk_btn.click(format_chunks, inputs=[current_workspace_name, srt_chunks_content, chunk_similarity_input, chunk_size_input], outputs=[srt_chunks_output])
-        
+    chunk_btn.click(format_chunks, inputs=[srt_file_name_pinyin, srt_chunks_content, chunk_similarity_input, chunk_size_input], outputs=[srt_chunks_output])
+    srt_chunks_output.change(lambda x: len(x), srt_chunks_output, chunk_length_output)
     gr.Markdown(value='''
                 第四步：     
                      
@@ -294,10 +351,14 @@ with gr.Blocks() as demo:
         with gr.Column(scale=7):
             with gr.Row():
                 user_prompt_input.render()
-                nice_extract_prompt_input.render()
-                
-                nice_extract_btn.render()  
-                nice_extract_stop_btn.render()
+                #nice_extract_prompt_examples.render()\
+                with gr.Column(scale=4):
+                    nice_extract_prompt_examples = gr.Examples(["Prompt模板1 提取优秀案例或者主题"], inputs=gr.Textbox(visible=False), fn=lambda x:extract_nice_content_prompts[x], outputs=nice_extract_prompt_input, run_on_click=True)
+
+                    nice_extract_prompt_input.render()
+                    with gr.Row():
+                        nice_extract_btn.render()  
+                        nice_extract_stop_btn.render()
             with gr.Row():
                 nice_content_output.render()
         
@@ -333,7 +394,7 @@ with gr.Blocks() as demo:
     matched_chunks_output.render()
     
 
-    matched_chunks_btn.click(query_chunks, inputs=[current_workspace_name, selected_contents_output, query_chunks_topN_input], outputs=[matched_chunks_output])
+    matched_chunks_btn.click(query_chunks, inputs=[srt_chunks_output, srt_file_name_pinyin, selected_contents_output, query_chunks_topN_input], outputs=[matched_chunks_output])
 
     
     gr.Markdown(value='''
@@ -343,6 +404,7 @@ with gr.Blocks() as demo:
                 3. 点击Find Matched SRT 按钮，AI会根据你的关键句子，从字幕全文中定位出最合适的字幕时间戳，用于后面从长视频中裁剪出短视频
                 ''')
     with gr.Row():
+        example_key_sentence_prompt_input = gr.Examples(["Prompt模板2 关键句子提取"], inputs=gr.Textbox(visible=False), fn=lambda x:extract_key_sentence_prompts[x], outputs=key_sentence_prompt_input, run_on_click=True)
         key_sentence_prompt_input.render()
         key_sentence_extract_btn.render()
     with gr.Row():
@@ -356,13 +418,16 @@ with gr.Blocks() as demo:
                                              llm_model_temperature, 
                                              llm_model_context_num, 
                                              ollama_keep_alive,
+                                             ollama_predict_num,
     ], outputs=key_sentence_extracted_output)
 
     matched_srt_output.render()
     
     
     
-    find_matched_srt_btn.click(invert_find, inputs=[key_sentence_extracted_output, srt_sub_content, fuzzy_search_param], outputs=matched_srt_output)
+    find_matched_srt_btn.click(create_srt_file_name_pinyin, srt_file, srt_file_name_pinyin)\
+    .then(load_text_from_srt, inputs=[srt_file], outputs=[srt_chunks_content, srt_sub_content])\
+    .then(invert_find, inputs=[key_sentence_extracted_output, srt_sub_content, fuzzy_search_param], outputs=matched_srt_output)
     
     gr.Markdown(value='''
 第七步：     
@@ -399,4 +464,4 @@ with gr.Blocks() as demo:
             d_video = gr.File()
             download_btn.click(fn=gen_download_video, inputs=[matched_srt_output, video_file_explorer], outputs=d_video)
     
-demo.launch(server_name='0.0.0.0')
+demo.launch(server_name='0.0.0.0', server_port=7777)

@@ -172,5 +172,7 @@ db/
 
 *.wav
 
-*/nohup.out
+
 nohup.out
+nohup.out
+*/nohup.out

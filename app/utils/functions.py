@@ -15,6 +15,7 @@ import time
 from http import HTTPStatus
 import asyncio
 from moviepy.editor import *
+from pypinyin import lazy_pinyin
 def save_video(video, target_path):
     """
     Saves the uploaded video to the specified target path.
@@ -222,7 +223,7 @@ def invert_find(short_text,srt_text, fuzz_param):
             split_text = re.split(r'[，,、？ 。！…：；]', match)
             
             for seg in split_text:
-                print(f"seg is {seg}")
+                #print(f"seg is {seg}")
                 for i in range(last_cursor, last_cursor + len(subs)):
                     current_index = i % len(subs)
                     score = (fuzz.ratio(seg, subs[current_index].text))
@@ -309,3 +310,19 @@ def gen_download_video(srt_file, video_file):
     #demo.load(None,None,None,js=scripts)
 
     return output_file
+
+
+
+
+def translate_filename_to_pinyin(chinese_filename):
+    parts = chinese_filename.split('.')
+    name_part = parts[0]
+    extension = parts[1] if len(parts) > 1 else ''
+    
+    pinyin_parts = lazy_pinyin(name_part)
+    pinyin_name = '_'.join(pinyin_parts)
+    
+    if extension:
+        return f"{pinyin_name}.{extension}"
+    else:
+        return pinyin_name
