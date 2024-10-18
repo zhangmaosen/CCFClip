@@ -464,4 +464,4 @@ with gr.Blocks() as demo:
             d_video = gr.File()
             download_btn.click(fn=gen_download_video, inputs=[matched_srt_output, video_file_explorer], outputs=d_video)
     
-demo.launch(server_name='0.0.0.0', server_port=7777)
+demo.launch(server_name='0.0.0.0')
