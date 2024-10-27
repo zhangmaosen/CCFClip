@@ -63,7 +63,7 @@ srt_upload = gr.File(label="Upload SRT File", file_types=['.srt'])
 # for llm
 llm_model_select = gr.Dropdown(["qwen2.5:72b-instruct","qwen2.5:32b-instruct","qwen2.5:7b-instruct"], label="Model", value="qwen2.5:32b-instruct")
 llm_model_temperature = gr.Slider(minimum=0, maximum=1, step=0.1, label="Temperature")
-llm_model_context_num = gr.Slider(minimum=8096*3, maximum=8096*4, step=1, label="Number of Context")
+llm_model_context_num = gr.Slider(value= 18000, minimum=4096*3, maximum=4096*5, step=1, label="Number of Context")
 ollama_predict_num = gr.Slider(minimum=768*2, maximum=4096, step=64, label="Number of Predictions")
 ollama_keep_alive = gr.Radio(choices=[0,-1], value=-1, label="Keep Alive Forever")
 
@@ -90,7 +90,7 @@ key_sentence_prompt_input = gr.Textbox(label="Prompt for Extracting Key Sentence
 key_sentence_extract_btn = gr.Button("Extract Key Sentences")
 key_sentence_extracted_output = gr.Textbox(label="Key Sentences", scale=4)
 
-user_prompt_input = gr.Textbox(label="User Prompt", value= "{}", visible=False)
+user_prompt_input = gr.Textbox(label="User Prompt", value= "后面是待处理的速记稿内容：\n{}", visible=False)
 
 matched_srt_output = gr.Textbox(label="Matched SRT Text")
 find_matched_srt_btn = gr.Button("Find Matched SRT Text")
@@ -464,4 +464,4 @@ with gr.Blocks() as demo:
             d_video = gr.File()
             download_btn.click(fn=gen_download_video, inputs=[matched_srt_output, video_file_explorer], outputs=d_video)
     
-demo.launch(server_name='0.0.0.0')
+demo.launch(server_name='0.0.0.0', server_port=7777)

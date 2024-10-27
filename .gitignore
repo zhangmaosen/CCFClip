@@ -175,3 +175,5 @@ db/
 
 nohup.out
 
+*.mp3
+*.npy
